@@ -1,0 +1,747 @@
+.header {
+    background: #F5F4F4;
+    padding: 2rem;
+    color: black;
+}
+
+.header-contenido {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    padding-bottom: 3rem;
+}
+
+.titular {
+    text-align: center;
+
+}
+
+.titular h1 {
+    font-family: 'Caveat Brush', cursive;
+    color: #fff;
+    font-size: 4rem;
+    margin: 0;
+    line-height: 1;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.titular h2 {
+    font-family: 'Revista', sans-serif;
+    color: #ecf0f1;
+    font-size: 3.5rem;
+    margin: 0.8rem 0 0;
+    font-weight: 300;
+    letter-spacing: 0.8px;
+    line-height: 1.3;
+}
+
+.play-pause{
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;outline: none;
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 1.5rem 0;
+    }
+    
+    .titular h1 {
+        font-size: 2rem;
+    }
+    
+    .titular h2 {
+        font-size: 1.1rem;
+        margin-top: 0.5rem;
+    }
+    
+    .header-contenido {
+        padding: 0 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .titular h1 {
+        font-size: 1.8rem;
+    }
+    
+    .titular h2 {
+        font-size: 1rem;
+    }
+}
+
+        /* HEADER */
+  
+    @font-face {
+        font-family: 'Revista';
+        src: url('/fonts/REVISTA.ttf') format('truetype');
+        font-family: 'Crayon';
+        src: url('/fonts/CFCrayons-Regular.ttf') format('truetype');
+    }
+    
+        * {
+            box-sizing: border-box;
+        }
+
+       
+
+        .seccion {
+            display: flex;
+            padding: 40px 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #F5F4F4;
+            font-family: 'Crayon';
+            border-radius: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Agregar transición */
+            background-image: url("img/fondoDiv1.png");
+            background-size: cover;
+            margin-bottom: 5rem;
+
+        }
+
+        .seccion:hover {
+            transform: translateY(-10px); /* Efecto de movimiento */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Agregar sombra */
+        }
+
+        .seccion--reverse {
+            flex-direction: row-reverse;
+        }
+
+        .contenido {
+            flex: 1 1 50%;
+            display: flex;
+            flex-direction: column;
+            background-size:cover;
+            padding-left: 3rem;
+            padding-right: 3rem;
+        }
+
+        .media {
+            flex: 1 1 50%;
+            padding: 20px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            
+            
+        }
+
+        .media img{
+            border-radius: 10px;
+
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            margin-bottom: 30px;
+            object-fit: cover;
+        }
+
+        .botones {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            background-color: none;
+        }
+
+        .boton {
+            display: inline-block;
+            width: 120px;
+            height: 120px;
+            background-image: url('img/fondoboton2.png'); 
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 120px;
+            border-radius: 10px;
+            transition: transform 0.2s;
+            font-family: "Crayon";
+
+            }
+
+        .boton:hover {
+                transform: scale(1.05);
+            }
+
+        /* Estilos específicos para el botón de audio */
+        .boton.audio-btn {
+            display: inline-block;
+            width: 120px;
+            height: 120px;
+            background-image: url('img/fondoboton2.png'); /* Reemplaza con la URL de tu imagen */
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 120px;
+            border-radius: 10px;
+            transition: transform 0.2s;
+            font-family: "Crayon";
+            
+        }
+
+        .boton.audio-btn:hover {
+            transform: scale(1.05); /* Mantener el efecto de escala */
+        }
+
+        h2 {
+            color: #000000;
+            font-size: 2.2em;
+            margin-bottom: 0.2rem;
+            line-height: 1.3;
+        }
+
+        p {
+            color: #000000;
+            line-height: 1.8;
+            font-size: 1.1em;
+            max-width: 600px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .seccion {
+                flex-direction: column;
+                padding: 30px 0;
+                background-color: #F5F4F4;
+            }
+
+            .seccion--reverse {
+                flex-direction: column;
+            }
+
+            .contenido, .media {
+                flex: 1 1 100%;
+                padding: 20px 15px;
+                text-align: center;
+            }
+
+            h2 {
+                font-size: 1.8em;
+                margin-bottom: 15px;
+                font-family: 'Caveat Brush';
+            }
+
+            p {
+                font-size: 1em;
+                max-width: 100%;
+            }
+
+            .boton {
+                padding: 12px 25px;
+                background-image: url('img/fondoboton.png'); /* Reemplaza con la URL de tu imagen */
+                color: white;
+                border: none;
+                border-radius: 25px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                font-size: 16px;
+                text-decoration: none; /* Quita el subrayado de los enlaces */
+                display: inline-block; /* Necesario para que funcione el padding */
+            }
+
+            .boton:hover {
+                transform: translateY(-2px);
+            }
+        }
+        
+.audio-controles {
+    display: none;
+    position: absolute;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.95);
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(130, 130, 130, 0.2);
+    width: 250px;
+    z-index: 10;
+}
+
+.audio-controles.visible {
+    display: block;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 4px;
+    background: #ddd;
+    margin: 10px 0;
+    cursor: pointer;
+}
+
+.progress {
+    height: 100%;
+    background: #ff0000;
+    width: 0%;
+}
+
+.tiempo {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8em;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.controles-principales {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    justify-content: space-between;
+}
+
+.volumen-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+ 
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+.footer {
+    background: rgb(37, 37, 37);
+    color: white;
+    padding: 20px 20px;
+    margin-top: 0;
+    text-align: center;
+}
+
+.footer-contenido {
+    display: inline-block;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 0;
+    font-family: "Crayon";
+}
+
+.footer-contenido p {
+    color: white;
+    line-height: 1.6;
+    margin: 15px 0;
+}
+
+.back-to-top {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #ff0000;
+    color: white;
+    border-radius: 25px;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+}
+
+.back-to-top:hover {
+    transform: translateY(-3px);
+}
+
+/* Estilo general de la barra de volumen */
+.volumen {
+  -webkit-appearance: none; /* Quita el estilo predeterminado en WebKit */
+  appearance: none;
+  width: 120px; /* Ancho de la barra */
+  height: 4px; /* Grosor de la barra */
+  background: #ddd; /* Color de la pista */
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+  border: none; /* Elimina bordes extra */
+}
+
+/* Personalización de la pista en Chrome, Safari y Edge */
+.volumen::-webkit-slider-runnable-track {
+  background: #ddd; /* Color de la pista */
+  height: 4px;
+  border-radius: 5px;
+  border: none; /* Asegura que no tenga bordes */
+}
+
+/* Personalización de la pista en Firefox */
+.volumen::-moz-range-track {
+  background: #ff0000;
+  height: 4px;
+  border-radius: 5px;
+  border: none;
+}
+
+/* Personalización del "thumb" (círculo deslizante) en Chrome, Safari y Edge */
+.volumen::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px; /* Tamaño del círculo */
+  height: 14px;
+  background: #ffffff; /* Color del thumb */
+  border-radius: 50%;
+  border: 2px solid #ff0000; /* Borde del thumb */
+  cursor: pointer;
+  margin-top: -5px; /* Alineación correcta */
+}
+
+/* Personalización del "thumb" en Firefox */
+.volumen::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: #ffffff;
+  border-radius: 50%;
+  border: 2px solid #ff0000;
+  cursor: pointer;
+}
+
+
+@media (max-width: 768px) {
+    .footer {
+        padding: 30px 15px;
+    }
+    
+    .footer-contenido p {
+        font-size: 0.9em;
+    }
+}
+
+
+.back-to-top {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #ff0000;
+    color: white;
+    border-radius: 25px;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+}
+
+.back-to-top:hover {
+    transform: translateY(-3px);
+}
+
+@media (max-width: 768px) {
+    .footer-contenido {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .redes-sociales {
+        justify-content: center;
+    }
+}
+
+
+/*MAPA*/
+.category-selector {
+    text-align: center;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+    margin-right: 1rem;
+
+}
+
+.category-btn {
+    border: none;
+    border-radius: 25px;
+    background: #f0f0f0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 1rem;
+    font-family: 'Crayon';
+    font-size: 17px;
+    padding: 10px;
+
+}
+
+.category-btn.active {
+    background: #000000;
+    color: white;
+    font-family: 'Crayon';
+}
+
+
+
+.image-map-container {
+    position: relative;
+    max-width: auto;
+    margin: 10px auto;
+}
+
+
+.base-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+
+
+.point {
+    width: 20px;
+    height: 20px;
+    background: #ff0000;
+    border-radius: 50%;
+    position: relative;
+    animation: pulse 2s infinite;
+}
+
+.point-label {
+    position: absolute;
+    left: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.map-point:hover .point-label {
+    opacity: 1;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 23, 2, 0.5); }
+    70% { box-shadow: 0 0 0 15px rgba(0,123,255,0); }
+    100% { box-shadow: 0 0 0 0 rgba(0,123,255,0); }
+}
+
+/* Añadir a las secciones destino */
+.section-target {
+    scroll-margin-top: 100px; /* Ajusta según tu header */
+}
+
+/* Añadir estos estilos al section del mapa */
+#mapa-interactivo {
+    position: relative;
+    margin: 40px auto;
+    width: auto;
+    
+
+}
+
+/* Corregir estilos de los puntos */
+.map-point {
+    position: absolute;
+    cursor: pointer;
+    /* Puntos ocultos por defecto */
+    opacity: 0;
+    /* Transición para efecto suave */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 2;
+    font-family: 'Crayon';
+}
+
+/* Cuando tienen .active, se muestran */
+.map-point.active {
+    opacity: 1;
+}
+
+.map-point:hover .point {
+    transform: scale(1.2);
+    background: #ff0000;
+}
+
+.point-label {
+    position: absolute;
+    left: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+    pointer-events: none;
+    font-family: 'Crayon';
+}
+
+.map-point:hover .point-label {
+    opacity: 1;
+}
+
+/* Asegurar que las secciones tienen scroll-margin */
+.section-target {
+    scroll-margin-top: 120px;
+}
+
+/*MAPA*/
+
+/* Estilos para el reproductor de audio */
+/* Estilos para el reproductor de audio */
+.reproductor {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    width: 250px;
+    margin-top: 20px;
+}
+
+.controles {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.controles button {
+    background-color: #ff0000;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.controles button:hover {
+    background-color: #ff0000;
+}
+
+.controles input[type="range"] {
+    width: 100%;
+}
+
+.controles span {
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.hidden {
+  display: none;
+}
+
+.points-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Simple estilo para ver la lista con padding */
+.points-list li {
+  padding: 4px 8px;
+  background: #f5f4f4;
+  margin: 2px 0;
+  border-radius: 5px;
+}
+.menu-lateral {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 220px; /* Ancho del menú */
+      height: 100vh;
+      background-color: #f1f1f1;
+      padding: 1rem;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+      overflow-y: auto;
+      transition: transform 0.3s ease; /* Animación para aparecer/desaparecer */
+      z-index: 999;
+    }
+
+    /* Cuando el menú está oculto, lo desplazamos a la izquierda */
+    .menu-lateral.oculto {
+      transform: translateX(-100%);
+    }
+
+    /* El botón para abrir/cerrar el menú, fijo a la izquierda y siempre visible */
+    .menu-toggle {
+      position: fixed;
+      top: 20px;     /* Ajusta según dónde quieras que aparezca verticalmente */
+      left: 0;       /* Pegado a la izquierda de la pantalla */
+      z-index: 1001; /* Para asegurarnos de que quede por encima del menú */
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+
+    /* Icono dentro del botón */
+    .menu-toggle i {
+      pointer-events: none;
+    }
+
+    body {
+        padding: 0 20px;
+        background-color: #F5F4F4;
+        transition: margin-left 0.3s ease;
+        margin-left: 220px; /* Aquí dejas espacio al menú */
+      }
+      
+      /* Cuando el menú está oculto */
+      .menu-lateral.oculto ~ body {
+        margin-left: 0;
+      }
+
+      .categoria {
+  margin-bottom: 1rem;
+}
+
+.toggle-sub {
+  display: block;
+  width: 100%;
+  background: #000;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-family: 'Crayon';
+}
+
+.subcategorias {
+  list-style: none;
+  padding-left: 1rem;
+  display: none;
+  margin-top: 0.5rem;
+}
+
+.subcategorias li button {
+  background: #f0f0f0;
+  border: none;
+  width: 100%;
+  text-align: left;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-bottom: 0.3rem;
+  font-family: 'Crayon';
+}
+
+.subcategorias li button:hover {
+  background: #ddd;
+}
+
+body.bloqueo-scroll {
+  overflow: hidden;
+}

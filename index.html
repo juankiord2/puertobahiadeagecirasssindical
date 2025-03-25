@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Puerto Bahia de Algeciras</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Caveat+Brush&family=Pangolin&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
+    
+
+</head>
+<div class="contenido-pagina">
+<header class="header">
+    <div class="header-contenido">
+        <div class="titular">
+            <h1 style="font-family:Revista;color: black;">EL PUERTO BAHIA DE ALGECIRAS</h1>
+            <h2 style="font-family: Crayon; color: black; margin-top: 3rem;">Un espacio de lucha sindical</h2>
+        </div>
+       
+    </div>
+</header>
+
+<body>
+    <aside class="menu-lateral">
+        
+        <!-- Categoría 1 -->
+        <div class="categoria">
+          <button class="category-btn toggle-sub">Definición de la política portuaria</button>
+          <ul class="subcategorias">
+            <li><button data-section="section1">Quieren cargárselo todo</button></li>
+            <li><button data-section="section2">La huelga de estibadores deja herido de muerte al Puerto de Algeciras</button></li>
+          </ul>
+        </div>
+      
+        <!-- Categoría 2 -->
+        <div class="categoria">
+          <button class="category-btn toggle-sub">Lucha por condiciones de trabajo dignas</button>
+          <ul class="subcategorias">
+            <li><button data-section="section4">Hay veces que desgraciadamente no vale el diálogo</button></li>
+            <li><button data-section="section5">El amarre era la gaviota del puerto</button></li>
+            <li><button data-section="section6">Todos tenemos que tener los mismos derechos</button></li>
+            <li><button data-section="section7">Todos en el mismo bote</button></li>
+            <li><button data-section="section8">No hay dinero para los convenios</button></li>
+            <li><button data-section="section9">La empresa debe valorar en su justa medida la profesionalidad</button></li>
+            <li><button data-section="section12">No queremos que sean los mismos otra vez los que negocien este convenio</button></li>
+
+          </ul>
+        </div>
+      
+        <!-- Categoría 3 -->
+        <div class="categoria">
+          <button class="category-btn toggle-sub">Freno a la deslocalización</button>
+          <ul class="subcategorias">
+            <li><button data-section="section3">Nada es permanente</button></li>
+          </ul>
+        </div>
+      
+        <!-- Categoría 4 -->
+        <div class="categoria">
+          <button class="category-btn toggle-sub">Oposición a despidos</button>
+          <ul class="subcategorias">
+            <li><button data-section="section10">El sindicato en todo momento mantuvo su protesta</button></li>
+          </ul>
+        </div>
+
+         <div class="categoria">
+          <button class="category-btn toggle-sub">Protesta ante incumplimientos</button>
+          <ul class="subcategorias">
+            <li><button data-section="section11">El salario es un derecho, no un privilegio</button></li>
+          </ul>
+        </div>
+      </aside>
+
+    <!-- Sección INTRODUCCION -->
+    <section class="seccion">
+        <audio class="audio-seccion" hidden>
+            <source src="audio/J_3.1.MP3https://drive.google.com/uc?export=download&id=" type="audio/mpeg">
+        </audio>
+        <div class="contenido">
+            <h2>INTRODUCCION</h2>
+                <p>El puerto de Algeciras es el principal puerto de España y uno de los más importantes de Europa. En 2017, los trabajadores del puerto se enfrentaron a un intento de reforma laboral que amenazaba la estabilidad de sus empleos. Gracias a la lucha sindical, lograron proteger sus derechos y mantener la calidad del empleo en el sector.</p>
+        </div>
+        <div class="media">
+            <img src="img/quierencargaselotodo.jpeg" alt="Imagen 1">
+        </div>
+    </section>
+     <!-- Sección MAPA -->
+  <!-- Reemplazar la sección del mapa con este código -->
+  <section class="seccion section-target" id="mapa-interactivo">
+    <div class="image-map-container" style="display: flex; flex-direction: column; align-items: center;">
+        <img src="img/mapapuerto.png" alt="Mapa interactivo" class="base-image">
+        
+        <!-- Puntos interactivos - Asegurarse que coinciden con las secciones existentes -->
+        <div class="map-point uno" style="left: 47%; top: 20%" data-section="section1" data-category="definiendo">
+            <div class="point"></div>
+            <div class="point-label">Quieren cargárselo todo</div>
+        </div>
+
+        <div class="map-point dos" style="left: 47%; top: 25%;" data-section="section2" data-category="definiendo">
+            <div class="point"></div>
+            <span class="point-label">La huelga de estibadores deja herido de muerte al Puerto de Algeciras</span>
+        </div>
+
+        <div class="map-point tres" style="left: 43%; top: 20%" data-section="section3" data-category="frenando">
+            <div class="point"></div>
+            <span class="point-label">Nada es permanente</span>
+        </div>
+
+        <div class="map-point cuatro" style="left: 47%; top: 42%" data-section="section4" data-category="lucha">
+            <div class="point"></div>
+            <span class="point-label">Hay veces que desgraciadamente no vale el diálogo</span>
+        </div>
+        
+        <div class="map-point cinco" style="left: 60%; top: 45%" data-section="section5" data-category="lucha">
+            <div class="point"></div>
+            <span class="point-label">El amarre era la gaviota del puerto</span>
+        </div>
+
+        <div class="map-point seis" style="left: 68%; top: 51%" data-section="section6" data-category="lucha">
+            <div class="point"></div>
+            <span class="point-label">Todos tenemos que tener los mismos derechos</span>
+        </div>
+        
+        <div class="map-point siete" style="left: 30%; top: 36%" data-section="section7" data-category="lucha">
+            <div class="point"></div>
+            <span class="point-label">Todos en el mismo bote</span>
+        </div>
+             
+         <div class="map-point diez" style="left: 52%; top: 70%" data-section="section10" data-category="oposicion">
+            <div class="point"></div>
+            <span class="point-label">El sindicato en todo momento mantuvo su protesta</span>
+        </div>
+
+        <div class="map-point ocho" style="left: 45%; top: 70%" data-section="section8" data-category="lucha">
+            <div class="point"></div>
+            <span class="point-label">No hay dinero para los convenios</span>
+        </div>
+
+        <div class="map-point nueve" style="left: 42%; top: 57%" data-section="section9" data-category="lucha">
+            <div class="point"></div>
+            <span class="point-label">La empresa debe valorar en su justa medida la profesionalidad</span>
+        </div>
+
+         <div class="map-point once" style="left: 40%; top: 53%" data-section="section11" data-category="protestando">
+            <div class="point"></div>
+            <span class="point-label">El salario es un derecho, no un privilegio</span>
+        </div>
+
+         <div class="map-point doce" style="left: 37%; top: 63%" data-section="section12" data-category="lucha">
+            <div class="point"></div>
+            <span class="point-label">No queremos que sean los mismos otra vez los que negocien este convenio</span>
+        </div>
+
+    </div>
+    
+    <div class="category-selector">
+        <button class="category-btn active" data-category="all">Todas</button>
+        <button class="category-btn" data-category="definiendo">Definición de la política portuaria</button>
+        <button class="category-btn" data-category="lucha">Lucha por condiciones de trabajo dignas</button>
+        <button class="category-btn" data-category="frenando">Freno a la deslocalización</button>
+        <button class="category-btn" data-category="oposicion">Oposición a despidos</button>
+        <button class="category-btn" data-category="protestando">Protesta ante incumplimientos</button>
+    </div>
+</section>
+
+
+    <!-- Sección 1.QUIEREN CARGÁRSELO TODO -->
+    <section id= "section1" class="seccion">
+        <audio class="audio-seccion" hidden>
+            <source src="audio/J_3.1.MP3" type="audio/mpeg">
+        </audio>
+        <div class="contenido">
+            <h2>Quieren cargárselo todo</h2>
+                <p>En 2017, el Gobierno intentó reformar el sistema portuario mediante un Real Decreto que debilitaba la estabilidad laboral y el poder sindical en la estiba, tras una sentencia de la UE. Los trabajadores, liderados por Coordinadora, respondieron con huelgas y movilizaciones en junio. Pese a la oposición mediática conservadora lograron un acuerdo que protegió la calidad del empleo y la cualificación del sector.</p>
+                <div class="botones">
+                    <a href="https://www.elmundo.es/economia/2017/06/09/593a8b18468aeb6f668b4611.html" class="boton" target="_blank"><FontAwesomeIcon icon="fa-light fa-newspaper" />Prensa</a>
+                    <a href="https://www.diariodecadiz.es/noticias-provincia-cadiz/unidad-estibadores-puerto-Algeciras-minimos_0_1142586312.html" class="boton" target="_blank">Prensa</a>
+                    <a href="https://www.larazon.es/economia/la-huelga-de-estibadores-deja-herido-de-muerte-al-puerto-de-algeciras-DB15414465/ " class="boton" target="_blank">Prensa</a>
+                </div>
+            </div>
+        <div class="media">
+            <img src="img/ONE Inspiration 1.jpg" alt="Imagen 1">
+            
+        </div>
+    </section>
+
+    <!-- Sección 2. HUELGA EN LA ESTIBA -->
+    <section id="section2" class="seccion seccion--reverse">
+        <div class="contenido">
+            <h2>Huelga en la estiba contra la aplicación del Tratado de emisiones de la UE</h2>
+            <p>Las medidas para descarbonizar la Unión Europea han generado inquietud entre los trabajadores portuarios.  Se teme que la aprobación del Régimen de Comercio de Emisión de la UE implique el desvío del tráfico marítimo y escalas a los puertos del Sur del Mediterráneo, mermando el volumen de tráfico en los puertos europeos. La European Dockworkers Council, a la que pertenece la Coordinadora Estatal de Trabajadores del Mar, convocó un paro de 2 horas el 3 de abril de 2024 como medida de presión para que sus alegaciones fueran tenidas en cuenta y se activaran estructuras de diálogo social. Al mismo tiempo que un centenar de estibadores se concentraban ante el Parlamento Europeo en Bruselas, en el Puerto Bahía de Algeciras, se llevaba a cabo la huelga y una concentración. Este conflicto ocupará buena parte de la agenda sindical de 2024.</p>
+        </div>
+        <div class="media">
+            <img src="/img/2. estiba.jpg" alt="Imagen 1">
+            <div class="botones">
+                <a href="https://cadenaser.com/andalucia/2024/04/02/el-3-de-abril-huelga-de-estibadores-en-algeciras-por-las-medidas-de-descarbonizacion-de-la-ue-radio-algeciras/" class="boton" target="_blank">Prensa</a>
+            </div>
+
+        </div>
+    </section>
+ <!-- Sección 3. HUELGA POR EL CONVENIO -->
+ <section id="section3" class="seccion">
+    <div class="contenido">
+        <h2>Huelga por el convenio y contra la deslocalización en APM Terminals</h2>
+            <p>APM Terminals gestiona una de las dos terminales de contenedores del Puerto Bahía de Algeciras.</p>
+            <div class="botones">
+                <a href="https://www.europasur.es/maritimas/inspeccion-trabajo-coordinadora-trabajadores-ett-plantilla-APM-Terminals-Algeciras_0_1867614040.html" class="boton" target="_blank">Prensa</a>
+            </div>
+    </div>
+    <div class="media">
+        <img src="img/3.jpg" alt="Imagen 1">
+       
+
+    </div>
+</section>
+
+<!-- Sección 4. LUCHA POR EL CONVENIO -->
+<section id="section4" class="seccion seccion--reverse">
+    <audio class="audio-seccion" hidden>
+    <source src="audio/J_4.MP3" type="audio/mpeg">
+  </audio>
+    <div class="contenido">
+        <h2>Lucha por el convenio y la sobrecarga de trabajo en el Puesto de Control Fronteriza</h2>
+        <p>En el Puesto de Control Fronterizo del Puerto Bahía de Algeciras, instalado en el muelle Juan Carlos I, se inspeccionan todas las mercancías que pasan por el puerto.</p>
+        <div class="botones">
+            <a href="https://www.coordinadora.org/web/2023/03/08/coordinadora-se-suma-a-la-concentracion-en-demanda-de-una-solucion-ante-el-colapso-del-pcf-de-algeciras/" class="boton" target="_blank">Prensa</a>
+            <div class="boton audio-btn" onclick="toggleControles(this)">Audio</div>
+            <div class="audio-controles">
+                
+                <div class="progress-bar" onclick="seekAudio(event)">
+                    <div class="progress"></div>
+                </div>
+                <div class="tiempo">
+                    <span class="current-time">0:00</span>
+                    <span class="duration">0:37</span>
+                </div>
+                <div class="controles-principales">
+                    <button class="play-pause" onclick="togglePlay(this)"><i class="fa-solid fa-play" style="color: #ffffff;"></i></button>
+                    <div class="volumen-container">
+                        <span><i class="fa-solid fa-volume-high"style="color: #ffffff;"></i></span>
+                        <input type="range" class="volumen" min="0" max="1" step="0.1" oninput="setVolume(this)">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="media">
+        <img src="img/4. puesto de control fronterizo.jpg" alt="Imagen 1">
+    </div>
+</section>
+    <!-- Sección 5. GAVIOTA -->
+    <section id="section5" class="seccion">
+        <audio class="audio-seccion" hidden>
+            <source src="audio/J_5.MP3" type="audio/mpeg">
+        </audio>
+        <div class="contenido">
+            <h2>'El amarre era la gaviota del puerto' Puesta en valor y negociación colectiva en el sector del amarre</h2>
+                <p>El amarre y desamarre de buques en el Puerto Bahía de Algeciras es una actividad de alto riesgo regulada por convenios sectoriales y empresariales. El convenio portuario de 2016, firmado por CCOO, UGT y SAME, estableció una bolsa de trabajo para "amarradores expertos", garantizando estabilidad laboral y cualificación. En 2018, la Comisión Nacional de los Mercados y la Competencia cuestionó el acuerdo por posibles restricciones a la competencia. Posteriormente, se firmaron acuerdos de mediación para estabilizar empleos ante la liberalización del sector y ajustar salarios según el IPC, impulsados principalmente por CCOO. Para 2024, SAME ya no participa en el sector, quedando CCOO y UGT como firmantes del acuerdo salarial. Mientras, el sindicato CTPA prioriza convenios empresariales, como en Marítima Algecireña S.A., y tiene presencia en otras empresas del sector. La estrategia de Coordinadora busca lograr acuerdos sectoriales más amplios, trascendiendo el ámbito local de Algeciras.</p>
+        </div>
+        <div class="media">
+            <img src="img/5, amarre.jpg" alt="Imagen 1">
+            <div class="botones">
+                <div class="boton audio-btn" onclick="toggleControles(this)">Audio</div>
+                
+                <div class="audio-controles">
+                    <div class="tiempo">
+                        <span class="current-time">0:00</span>
+                        <span class="duration">1:07</span>
+                    </div>
+                    <div class="progress-bar" onclick="seekAudio(event)">
+                        <div class="progress"></div>
+                    </div>
+                    <div class="controles-principales">
+                        <button class="play-pause" onclick="togglePlay(this)"><i class="fa-solid fa-play" style="color: #ffffff;"></i></button>
+                        <div class="volumen-container">
+                            <span><i class="fa-solid fa-volume-high"style="color: #ffffff;"></i></span>
+                            <input type="range" class="volumen" min="0" max="1" step="0.1" oninput="setVolume(this)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección 6. RECLAMACIÓN SINDICAL-->
+    <section id="section6" class="seccion seccion--reverse">
+        <div class="contenido">
+            <h2>Reclamación sindical por la unificación de convenios en el sector del practicaje</h2>
+            <p>El practicaje es una actividad fundamental en el transporte marítimo. Consiste en el asesoramiento a los capitanes de buque a su entrada y salida de los puertos. La Corporación de Prácticos del Puerto Bahía de Algeciras gestiona dicha actividad en la que se emplean, además de los prácticos, que son los titulares de la empresa, un buen número de trabajadores para diferentes operaciones. Existe, por un lado, un convenio que regula las condiciones de los radio-operadores, y, por otro lado, otro convenio que regula las condiciones de los “boteros” -personal de marinería-. La principal reclamación sindical en esta actividad portuaria es la unificación de ambos sectores en un mismo convenio. Evitar divisiones es fundamental para articular una respuesta sindical en cualquier ámbito.</p>
+        </div>
+        <div class="media">
+            <img src="img/6. practicaje.jpg" alt="Imagen 1">
+            <div class="botones">
+                <a href="https://www.juntadeandalucia.es/empleoformacionytrabajoautonomo/mapaNegociacionColectiva/descargarDocumento?uuid=97d2a1f1-24df-11e7-8184-1ddc756799b3" class="boton" target="_blank">BOP</a>
+                <a href="https://www.juntadeandalucia.es/empleoformacionytrabajoautonomo/mapaNegociacionColectiva/descargarDocumento?uuid=f1ca888b-14d5-11e5-b42e-c78e9a710b7c" class="boton" target="_blank">BOP</a>
+        </div>
+    </section>
+
+ <!-- Sección 7.TODOS EN EL MISMO BOTE -->
+ <section id="section7" class="seccion">
+    <audio class="audio-seccion" hidden>
+        <source src="audio/J_7.MP3" type="audio/mpeg">
+    </audio>
+    <div class="contenido">
+        <h2>'Todos en el mismo bote' La fuerza de la unidad en el sector del remolque</h2>
+            <p>El servicio de remolque consiste en la ayuda a los movimientos de un buque siguiendo indicaciones de los capitanes de buque a través de la fuerza motriz de otro buque remolcador dentro de las aguas del espacio portuario. En el Puerto Bahía de Algeciras este servicio está encomendado a la empresa Boluda Corporación Marítima. El convenio colectivo fue firmado en 2015 para las empresas - Cía. Ibérica de Remolcadores del Estrecho, S.A. CIRESA - Servicios Auxiliares de Puertos, S.A. SERTOSA - Servicios Marítimos de Algeciras, S.A. SERMAR, las tres pertenecientes al grupo Boluda. El sindicato con la representación de estos trabajadores es CGT-SAME. El Sindicato de Actividades Marítimas, un sindicato exclusivamente portuario, se integró dentro de CGT en el año 2017. Desde el punto de vista sindical, la lucha en la negociación de los convenios se centró en unificar bajo un mismo acuerdo a las tres empresas que prestaban el servicio, además de cuestiones de jornada, vacaciones y salario.</p>
+    </div>
+    <div class="media">
+        <img src="img/7. remolque.jpg" alt="Imagen 1">
+        <div class="botones">
+            <div class="boton audio-btn" onclick="toggleControles(this)">Audio</div>
+            
+            <div class="audio-controles">
+                <div class="tiempo">
+                    <span class="current-time">0:00</span>
+                    <span class="duration">2:26</span>
+                </div>
+                <div class="progress-bar" onclick="seekAudio(event)">
+                    <div class="progress"></div>
+                </div>
+                <div class="controles-principales">
+                    <button class="play-pause" onclick="togglePlay(this)"><i class="fa-solid fa-play" style="color: #ffffff;"></i></button>
+                    <div class="volumen-container">
+                        <span><i class="fa-solid fa-volume-high"style="color: #ffffff;"></i></span>
+                        <input type="range" class="volumen" min="0" max="1" step="0.1" oninput="setVolume(this)">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Sección 8.PRESENTAN SUS PLIEGOS -->
+<section id="section8" class="seccion seccion--reverse">
+    <div class="contenido">
+        <h2>'Presentan sus pliegos y luego no hay dinero para los convenios' Las reivindicaciones</h2>
+            <p>Según los trabajadores, OHL da el servicio desde 2020 pero mantiene congeladas las conversaciones sobre el convenio colectivo. Coordinadora es mayoritaria en la representación de estos trabajadores, que a fines de 2021 decretaron la huelga para exigir a la empresa OHL, concesionaria de los servicios de limpieza en el PBA, que avancen las negociaciones por un nuevo convenio colectivo que garanticen mejoras salariales, en un momento de gran preocupación por la pérdida de poder adquisitivo que supuso la inflación. </p>
+    </div>
+    <div class="media">
+        <img src="img/8. OHL.jpg" alt="Imagen 1">
+        <div class="botones">
+            <a href="https://www.europasur.es/maritimas/limpieza-Autoridad-Portuaria-huelga-noviembre-puerto-Algeciras_0_1630638188.html" class="boton" target="_blank">Prensa</a> 
+            <a href="https://www.youtube.com/watch?v=yDDfhTUxSO8" class="boton" target="_blank">Vídeo</a>
+    </div>
+
+</section>
+    <!-- Sección 9. DEL BLOQUEO A LA APROBACIÓN -->
+    <section id="section9" class="seccion">
+        <audio class="audio-seccion" hidden>
+            <source src="audio/J_3.1.MP3https://drive.google.com/uc?export=download&id=" type="audio/mpeg">
+        </audio>
+        <div class="contenido">
+            <h2>Del bloqueo a la aprobación del convenio: subidas salariales del 20% para el personal</h2>
+            <p> La vigencia del convenio colectivo terminó el 31 de diciembre de 2021, pero hasta mediados de octubre de 2022 no comenzaron las negociaciones del Convenio Colectivo del personal de tierra de FRS Iberia y de Ferris Rápidos del Sur. El servicio se vio muy afectado por la pandemia y el cierre de la frontera con Marruecos. CC OO fue crucial en esas negociaciones y bajo su asesoramiento, el comité de empresa de FRS y las delegadas de Ferris plantearon su demanda principal: un aumento salarial. Finalmente, al borde del fin del año, se llega a un acuerdo con un aumento salarial del 20%, que afecta a unas 200 personas que conforman la plantilla de tierra, que cubren el enlace marítimo con Ceuta y Tánger. CC OO valoró positivamente el acuerdo.</p>
+        </div>
+        <div class="media">
+            <img src="img/9. bloqueo.jpg" alt="Imagen 1">
+        </div>
+    </section>
+
+    <!-- Sección 10.UNIÓN TRABAJADORES PORTUARIOS -->
+    <section id="section10" class="seccion seccion--reverse">
+         <audio class="audio-seccion" hidden>
+        <source src="audio/E_10.MP3" type="audio/mpeg">
+    </audio>
+        <div class="contenido">
+            <h2>Unión de los trabajadores portuarios en su rechazo a los despidos en la Agencia Marítima Partida Logistics</h2>
+            <p>En junio de 2023, el sindicato Coordinadora de Trabajadores de los Puertos Andaluces CTPA organizó una protesta frente al despido de nueve trabajadores de la empresa Agencia Marítima Partida Logistics, en el Puerto de Algeciras. Para el sindicato, los despidos eran improcedentes, puesto que es habitual que baje la productividad en los meses de verano, así como en otros momentos del año se pide a los trabajadores 'un esfuerzo muy grande'. La concentración promovida por CTPA en protesta por los despidos visibilizó la unión de trabajadores de muy diversos oficios dentro del puerto.</p>
+        </div>
+        <div class="media">
+            <img src="img/11. trato justo.png" alt="Imagen 1">
+            <div class="botones">
+                <a href="https://www.elestrechodigital.com/2023/06/15/coordinadora-protesta-por-los-despidos-en-partida-logistics-en-algeciras/" class="boton" target="_blank">Prensa</a>
+                <div class="boton audio-btn" onclick="toggleControles(this)">Audio</div>
+                
+                <div class="audio-controles">
+                    <div class="tiempo">
+                        <span class="current-time">0:00</span>
+                        <span class="duration">1:48</span>
+                    </div>
+                    <div class="progress-bar" onclick="seekAudio(event)">
+                        <div class="progress"></div>
+                    </div>
+                    <div class="controles-principales">
+                        <button class="play-pause" onclick="togglePlay(this)"><i class="fa-solid fa-play" style="color: #ffffff;"></i></button>
+                        <div class="volumen-container">
+                            <span><i class="fa-solid fa-volume-high"style="color: #ffffff;"></i></span>
+                            <input type="range" class="volumen" min="0" max="1" step="0.1" oninput="setVolume(this)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+ <!-- Sección 11. EL SALARIO ES UN DERECHO -->
+ <section id="section11" class="seccion">
+    <audio class="audio-seccion" hidden>
+        <source src="audio/J_3.1.MP3https://drive.google.com/uc?export=download&id=" type="audio/mpeg">
+    </audio>
+    <div class="contenido">
+        <h2>'El salario es un derecho, no un privilegio' Las y los trabajadores de Intershipping exigen el pago de sus salarios pendientes</h2>
+        <p>La naviera Intershipping, encargada de las líneas que unen Algeciras-Tánger y Tarifa-Tánger, incurrió en impagos de salarios durante varios meses, que dejaron a más de 50 familias en una situación de extrema precariedad, a fines de 2023. Las y los trabajadores se concentraron en demanda del pago de sus salarios y en protesta por la escasez de comunicación por parte de la empresa. Además, los trabajadores pidieron el apoyo de la Autoridad Portuaria de Bahía de Algeciras.</p>
+    </div>
+    <div class="media">
+        <img src="img/11. naviera.png" alt="Imagen 1">
+        <div class="botones">
+            <a href="https://www.diarioarea.com/2023/11/27/trabajadores-de-intershipping-puerto-de-algeciras-concentracion/" class="boton" target="_blank">Prensa</a>
+    </div>
+</section>
+
+<!-- Sección 12. CULMINACIÓN DE LAS NEGOCIACIONES -->
+<section id="section12" class="seccion seccion--reverse">
+    <div class="contenido">
+        <h2>'Culminación de las negociaciones del Convenio Agencias Marítimas Consignatarias de Buques S. A. APEMAR'</h2>
+        <p> El Convenio Colectivo Agencias Marítimas de Cádiz, más conocido como el convenio de Apemar, afecta a miles de trabajadores, puesto que aglutina a más de un centenar de empresas consignatarias, transitarias, agentes de aduanas y estibadoras que desarrollan su actividad en el Puerto de la Bahía de Algeciras y en el de Cádiz. Tras una intensa negociación, se publicó en mayo de 2022 con vigencia de tres años 2021-23 y consolidó mejoras salariales y de las condiciones laborales.   </p>
+    </div>
+    <div class="media">
+        <img src="img/12. culminacion buques.jpg" alt="Imagen 1">
+        <div class="botones">
+            <a href="https://www.coordinadora.org/web/2023/01/31/coordinadora-tpa-culmina-tras-dos-anos-el-acuerdo-de-empresa-con-terminales-maritimas-del-estrecho-tme/" class="boton" target="_blank">Prensa</a>
+            <a href="https://www.diarioarea.com/2021/01/20/febrero-mes-clave-para-la-negociacion-en-apemar/" class="boton" target="_blank">Prensa</a>
+            <a href="https://ccoo.app/convenio/convenio-colectivo-agencias-maritimas-de-cadiz/" class="boton" target="_blank">Convenio</a>
+            <a href="https://www.bopcadiz.es/export/sites/default/.boletines_pdf/2022/05_mayo/BOP086_09-05-22.pdf" class="boton" target="_blank">BOP</a>            
+    </div>
+</section>
+
+<!-- Sección 13. TRABAJADOR DEL PUERTO -->
+<section id="section 13" class="seccion">
+     <audio class="audio-seccion" hidden>
+        <source src="audio/J_13.1.MP3" type="audio/mpeg">
+    </audio>
+    <audio class="audio-seccion" hidden>
+        <source src="audio/J_13.1.MP3" type="audio/mpeg">
+    </audio>
+    <div class="contenido">
+        <h2>'Te sientes trabajador del puerto, no de tu empresa'</h2>
+        <p>La Coordinadora optó por expandirse más allá de la estiba, a todos los trabajos del puerto, como parte de una estrategia del sindicato para hacer frente a los desafíos que impone la globalización neoliberal -liberalización del sector, competencia internacional entre puertos-. En un tiempo récord, la Coordinadora ha logrado convertirse en un sindicato hegemónico en los puertos del Estado español, con una estrategia que pasa por la construcción de una narrativa que enfatiza la identidad portuaria de los trabajadores.</p>
+    </div>
+    <div class="media">
+        <img src="img/localesindicales.jpg" alt="Imagen 1">
+        <div class="boton audio-btn" onclick="toggleControles(this)">Audio</div>
+                
+                <div class="audio-controles">
+                    <div class="tiempo">
+                        <span class="current-time">0:00</span>
+                        <span class="duration">1:13</span>
+                    </div>
+                    <div class="progress-bar" onclick="seekAudio(event)">
+                        <div class="progress"></div>
+                    </div>
+                    <div class="controles-principales">
+                        <button class="play-pause" onclick="togglePlay(this)"><i class="fa-solid fa-play" style="color: #ffffff;"></i></button>
+                        <div class="volumen-container">
+                            <span><i class="fa-solid fa-volume-high" style="color: #ffffff;"></i></span>
+                            <input type="range" class="volumen" min="0" max="1" step="0.1" oninput="setVolume(this)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+</section>
+
+<!-- Sección 14. GESTOS -->
+<section id="section14" class="seccion seccion--reverse">
+    <div class="contenido">
+        <h2>Sobre los gestos de solidaridad más allá del puerto</h2>
+        <p>Coordinadora tuvo un gesto, en mayo de 2024, que recupera la tradición solidaria del sindicalismo histórico, cuando hizo un aporte a la caja de resistencia de los trabajadores de Acerinox en solidaridad con su proceso de huelga. </p>
+        <div class="botones">
+            <a href="https://www.elestrechodigital.com/2024/05/15/los-estibadores-del-puerto-de-algeciras-se-solidarizan-con-los-trabajadores-en-huelga-de-acerinox/" class="boton" target="_blank">Prensa</a>
+        </div>
+    </div>
+    <div class="media">
+        <img src="img/14. USO.png" alt="Imagen 1">
+    </div>
+</section>
+</div>
+    <script>
+  // Función para reproducir o pausar el audio de una sección
+function playSectionAudio(button) {
+    const section = button.closest('.seccion');
+    const audio = section.querySelector('.audio-seccion');
+
+    if (!audio) {
+        console.error('No se encontró el elemento de audio en la sección.');
+        return;
+    }
+
+    if (audio.paused) {
+        audio.play().catch(error => {
+            console.error('Error al reproducir el audio:', error);
+        });
+    } else {
+        audio.pause();
+        audio.currentTime = 0;
+    }
+}
+
+// Función para mostrar u ocultar los controles de audio
+function toggleControles(btn) {
+    const controles = btn.nextElementSibling;
+
+    if (!controles || !controles.classList.contains('audio-controles')) {
+        console.error('No se encontraron los controles de audio.');
+        return;
+    }
+
+    // Ocultar otros controles visibles
+    document.querySelectorAll('.audio-controles.visible').forEach(c => {
+        if (c !== controles) c.classList.remove('visible');
+    });
+
+    // Mostrar u ocultar los controles actuales
+    controles.classList.toggle('visible');
+
+    // Actualizar la duración del audio si no se ha hecho antes
+    const audio = controles.parentElement.previousElementSibling;
+    if (audio && !audio.dataset.durationSet) {
+        audio.addEventListener('loadedmetadata', () => {
+            const durationElement = controles.querySelector('.duration');
+            if (durationElement) {
+                durationElement.textContent = formatTime(audio.duration);
+            }
+        });
+        audio.dataset.durationSet = true;
+    }
+}
+
+// Función para reproducir o pausar el audio desde los controles
+function togglePlay(btn) {
+    const controles = btn.closest('.audio-controles');
+    const audio = controles.parentElement.previousElementSibling;
+
+    if (!audio) {
+        console.error('No se encontró el elemento de audio.');
+        return;
+    }
+
+    if (audio.paused) {
+        audio.play().then(() => {
+            btn.textContent = '<i class="fa-solid fa-pause" style="color: #ffffff;"></i>';
+            startProgressUpdate(audio, controles);
+        }).catch(error => {
+            console.error('Error al reproducir el audio:', error);
+        });
+    } else {
+        audio.pause();
+        btn.textContent = '<i class="fa-solid fa-play" style="color: #ffffff;"></i>';
+    }
+}
+
+// Función para ajustar el volumen del audio
+function setVolume(slider) {
+    const audio = slider.closest('.audio-controles').parentElement.previousElementSibling;
+
+    if (!audio) {
+        console.error('No se encontró el elemento de audio.');
+        return;
+    }
+
+    audio.volume = slider.value;
+}
+
+// Función para buscar un punto específico en el audio
+function seekAudio(e) {
+    const bar = e.currentTarget;
+    const rect = bar.getBoundingClientRect();
+    const porcentaje = (e.clientX - rect.left) / rect.width;
+    const audio = bar.closest('.audio-controles').parentElement.previousElementSibling;
+
+    if (!audio) {
+        console.error('No se encontró el elemento de audio.');
+        return;
+    }
+
+    audio.currentTime = audio.duration * porcentaje;
+}// JavaScript: Uso de btn.closest('.seccion').querySelector('.audio-seccion') para localizar el audio
+
+function toggleControles(btn) {
+  const controles = btn.nextElementSibling;
+  document.querySelectorAll('.audio-controles.visible').forEach(c => {
+    if (c !== controles) c.classList.remove('visible');
+  });
+  controles.classList.toggle('visible');
+
+  const audio = btn.closest('.seccion').querySelector('.audio-seccion');
+  if (audio && !audio.dataset.durationSet) {
+    audio.addEventListener('loadedmetadata', () => {
+      const durationElement = controles.querySelector('.duration');
+      if (durationElement) {
+        durationElement.textContent = formatTime(audio.duration);
+      }
+    });
+    audio.dataset.durationSet = true;
+  }
+}
+
+function togglePlay(btn) {
+  const controles = btn.closest('.audio-controles');
+  const audio = btn.closest('.seccion').querySelector('.audio-seccion');
+
+  if (!audio) {
+    console.error('No se encontró el elemento de audio.');
+    return;
+  }
+
+  if (audio.paused) {
+    audio.play().then(() => {
+      btn.innerHTML = '<i class="fa-solid fa-pause" style="color: #ffffff;"></i>'; // Ícono de pausa
+      startProgressUpdate(audio, controles);
+    }).catch(error => {
+      console.error('Error al reproducir el audio:', error);
+    });
+  } else {
+    audio.pause();
+    btn.innerHTML = '<i class="fa-solid fa-play" style="color: #ffffff;"></i>'; // Ícono de play
+  }
+}
+
+
+function setVolume(slider) {
+  const audio = slider.closest('.seccion').querySelector('.audio-seccion');
+  if (!audio) {
+    console.error('No se encontró el elemento de audio.');
+    return;
+  }
+  audio.volume = slider.value;
+}
+
+function seekAudio(e) {
+  const bar = e.currentTarget;
+  const rect = bar.getBoundingClientRect();
+  const porcentaje = (e.clientX - rect.left) / rect.width;
+  const audio = bar.closest('.seccion').querySelector('.audio-seccion');
+  if (!audio) {
+    console.error('No se encontró el elemento de audio.');
+    return;
+  }
+  audio.currentTime = audio.duration * porcentaje;
+}
+
+
+// Función para formatear el tiempo en minutos y segundos
+function formatTime(seconds) {
+    const min = Math.floor(seconds / 60);
+    const sec = Math.floor(seconds % 60);
+    return `${min}:${sec.toString().padStart(2, '0')}`;
+}
+
+// Función para actualizar la barra de progreso del audio
+function startProgressUpdate(audio, controles) {
+    const update = () => {
+        if (audio.paused) return;
+
+        const progress = (audio.currentTime / audio.duration) * 100;
+        const progressBar = controles.querySelector('.progress');
+        const currentTimeElement = controles.querySelector('.current-time');
+
+        if (progressBar) {
+            progressBar.style.width = `${progress}%`;
+        }
+
+        if (currentTimeElement) {
+            currentTimeElement.textContent = formatTime(audio.currentTime);
+        }
+
+        requestAnimationFrame(update);
+    };
+
+    update();
+}
+
+// Cerrar controles al hacer clic fuera de ellos
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.audio-controles') && !e.target.closest('.audio-btn')) {
+        document.querySelectorAll('.audio-controles.visible').forEach(c => {
+            c.classList.remove('visible');
+        });
+    }
+});
+
+// Botón para volver al inicio de la página
+const backToTopButton = document.querySelector('.back-to-top');
+if (backToTopButton) {
+    backToTopButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+} else {
+    console.error('No se encontró el botón para volver al inicio.');
+}
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Referencias a los elementos
+    const categoryButtons = document.querySelectorAll('.category-btn');
+    const mapPoints       = document.querySelectorAll('.map-point');
+    const sections        = document.querySelectorAll('.seccion');
+
+    // 2. Controlador de categorías
+    categoryButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Remover la clase 'active' de todos los botones
+        categoryButtons.forEach(b => b.classList.remove('active'));
+
+        // Añadir la clase 'active' al botón seleccionado
+        btn.classList.add('active');
+
+        // Obtener la categoría seleccionada
+        const category = btn.dataset.category;
+
+        // Mostrar u ocultar puntos según la categoría
+        mapPoints.forEach(point => {
+          const pointCategory = point.dataset.category;
+          if (category === 'all' || pointCategory === category) {
+            point.classList.add('active');
+          } else {
+            point.classList.remove('active');
+          }
+        });
+      });
+    });
+
+    // Mostrar todos los puntos al cargar la página
+    mapPoints.forEach(point => point.classList.add('active'));
+
+    // 3. Navegación a secciones desde los puntos
+    mapPoints.forEach(point => {
+      point.addEventListener('click', (event) => {
+        event.preventDefault();
+        // Elimina la clase "selected" de todos los puntos
+        mapPoints.forEach(pt => pt.classList.remove('selected'));
+        // Agrega la clase "selected" al punto clicado
+        point.classList.add('selected');
+        
+        // Obtiene la sección destino y se desplaza a ella
+        const sectionId = point.dataset.section;
+        const targetSection = document.getElementById(sectionId);
+        if (targetSection) {
+          targetSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        } else {
+          console.error(`No se encontró la sección con id: ${sectionId}`);
+        }
+      });
+    });
+
+    // 4. IntersectionObserver para actualizar la selección de puntos al hacer scroll
+    const observerOptions = {
+      root: null,
+      threshold: 0.5 // Ajusta según cuándo quieras que se considere visible
+    };
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Elimina la clase "selected" de todos los puntos
+          mapPoints.forEach(pt => pt.classList.remove('selected'));
+
+          // Obtiene el ID de la sección en pantalla
+          const sectionId = entry.target.id;
+          
+          // Encuentra el punto del mapa correspondiente
+          const correspondingPoint = document.querySelector(`.map-point[data-section="${sectionId}"]`);
+          if (correspondingPoint) {
+            correspondingPoint.classList.add('selected');
+          }
+        }
+      });
+    }, observerOptions);
+
+    // Observa cada sección para detectar cuándo entra en vista
+    sections.forEach(section => sectionObserver.observe(section));
+    
+  });
+  document.addEventListener("DOMContentLoaded", () => {
+  const menuToggle = document.getElementById("menu-toggle");
+  const menuLateral = document.querySelector(".menu-lateral");
+
+  if (menuToggle && menuLateral) {
+    menuToggle.addEventListener("click", () => {
+      // Alternamos una clase (p.e. "oculto") al <aside>
+      menuLateral.classList.toggle("oculto");
+    });
+  }
+});
+document.querySelectorAll('.toggle-sub').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const sub = btn.nextElementSibling;
+    sub.classList.toggle('open');
+    sub.style.display = sub.classList.contains('open') ? 'block' : 'none';
+  });
+});
+
+document.querySelectorAll('.subcategorias button').forEach(subBtn => {
+  subBtn.addEventListener('click', () => {
+    const targetId = subBtn.getAttribute('data-section');
+    const target = document.getElementById(targetId);
+
+    if (target) {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  });
+});
+
+
+
+
+
+        </script>
+      <footer class="footer">
+        <div class="footer-contenido">
+            <p>
+                SPATIALPOLITICS La política del espacio de la fuerza laboral en la industria logística. Financiado por el Plan Nacional de I+D+i. Generación de Conocimiento. Ministerio de Ciencia e Innovación. Ref: 
+                <a href="https://www.aei.gob.es/ayudas-concedidas/buscador-ayudas-concedidas?year=All&convocatory=All&code=PID2021-122890OB-I00&gender=All&area=&subarea=&title=&keywords=&cif=&name=&ccaa=All&province=All&granted%5Bmin%5D=&granted%5Bmax%5D=&summary=" target="_blank" style="color: #007bff; text-decoration: noneunderline #007bff;">
+                    PID2021-122890OB-I00
+                </a>
+            </p>
+            <p>©2025 Desarrollada por el grupo de investigación SEJ-657 <a href="https://sej657.uca.es/" target="_blank" style="color: #007bff; text-decoration: noneunderline #007bff;"> Transformaciones y conflictos en las Sociedades Contemporáneas</a> bajo los estándares del Software libre.</p>
+            <a href="#top" class="back-to-top">Volver arriba</a>
+        </div>
+    </footer>
+</body>
+</html>
