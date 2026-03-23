@@ -73,12 +73,16 @@
 
         /* HEADER */
   
-    @font-face {
-        font-family: 'Revista';
-        src: url('/fonts/REVISTA.ttf') format('truetype');
-        font-family: 'Crayon';
-        src: url('/fonts/CFCrayons-Regular.ttf') format('truetype');
-    }
+  /* ✅ CORRECTO - un bloque por fuente */
+@font-face {
+    font-family: 'Revista';
+    src: url('fonts/REVISTA.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Crayon';
+    src: url('fonts/DK\ Cool\ Crayon.ttf') format('truetype');
+}
     
         * {
             box-sizing: border-box;
@@ -108,6 +112,7 @@
 
         .seccion--reverse {
             flex-direction: row-reverse;
+            
         }
 
         .contenido {
@@ -154,7 +159,7 @@
             display: inline-block;
             width: 120px;
             height: 120px;
-            background-image: url('img/fondoboton2.png'); 
+            background-image: url('img/colorpop2.png'); 
             background-size: contain;
             background-position: center;
             background-repeat: no-repeat;
@@ -181,7 +186,7 @@
             display: inline-block;
             width: 120px;
             height: 120px;
-            background-image: url('img/fondoboton2.png'); /* Reemplaza con la URL de tu imagen */
+            background-image: url('img/colorpop2.png'); /* Reemplaza con la URL de tu imagen */
             background-size: contain;
             background-position: center;
             background-repeat: no-repeat;
@@ -294,6 +299,25 @@
     height: 100%;
     background: #ff0000;
     width: 0%;
+}
+
+.mapa-btn {
+    display: block;
+    width: 100%;
+    background: #000;
+    color: #000000;
+    padding: 0.5rem 1rem;
+    text-align: left;
+    border-radius: 5px;
+    font-family: 'Crayon';
+    font-size: 17px;
+    text-decoration: none;
+    margin-bottom: 1rem;
+}
+
+.mapa-btn:hover {
+    background: #000000;
+    color: #fff;
 }
 
 .tiempo {
