@@ -4,17 +4,264 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>El Puerto Bahia de Algeciras</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Caveat+Brush&family=Pangolin&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
     <style>
-      /* Indica visualmente qué categoría está filtrando el mapa */
+
+      /* Botón en estado "reproduciendo" */
+      .boton.audio-btn.is-playing {
+        animation: pulse-play 1.8s ease-in-out infinite;
+        position: relative;
+      }
+
+      @keyframes pulse-play {
+        0%   { box-shadow: 0 0 0 0 rgba(226, 75, 74, 0.6); }
+        60%  { box-shadow: 0 0 0 12px rgba(226, 75, 74, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(226, 75, 74, 0); }
+      }
+
+      /* Icono de onda animada dentro del botón cuando está reproduciendo */
+      .boton.audio-btn.is-playing::after {
+        content: '▶';
+        position: absolute;
+        bottom: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 10px;
+        color: rgba(255,255,255,0.7);
+        letter-spacing: 2px;
+      }
+
+      /* Reproductor de audio mejorado */
+      .audio-controles {
+        display: none;
+        position: absolute;
+        bottom: 130px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(10, 10, 10, 0.97);
+        padding: 18px;
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.07);
+        width: 280px;
+        z-index: 10;
+        backdrop-filter: blur(12px);
+      }
+
+      .audio-controles.visible {
+        display: block;
+        animation: fadeInUp 0.18s ease;
+      }
+
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+        to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+      }
+
+      /* Nombre del audio en el reproductor */
+      .audio-titulo {
+        font-family: 'Crayon', cursive;
+        font-size: 0.78rem;
+        color: rgba(255,255,255,0.5);
+        text-align: center;
+        margin-bottom: 10px;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* Barra de progreso más usable */
+      .progress-bar {
+        width: 100%;
+        height: 6px;
+        background: rgba(255,255,255,0.15);
+        margin: 8px 0;
+        cursor: pointer;
+        border-radius: 3px;
+        position: relative;
+        transition: height 0.15s ease;
+      }
+
+      .progress-bar:hover {
+        height: 10px;
+      }
+
+      .progress {
+        height: 100%;
+        background: linear-gradient(90deg, #E24B4A, #ff7b7a);
+        width: 0%;
+        border-radius: 3px;
+        transition: width 0.1s linear;
+        position: relative;
+      }
+
+      /* Thumb visible al hover en la barra */
+      .progress::after {
+        content: '';
+        position: absolute;
+        right: -5px;
+        top: 50%;
+        transform: translateY(-50%) scale(0);
+        width: 12px;
+        height: 12px;
+        background: #fff;
+        border-radius: 50%;
+        box-shadow: 0 0 0 2px #E24B4A;
+        transition: transform 0.15s ease;
+      }
+
+      .progress-bar:hover .progress::after {
+        transform: translateY(-50%) scale(1);
+      }
+
+      .tiempo {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.72rem;
+        color: rgba(255,255,255,0.55);
+        margin-bottom: 12px;
+        font-family: monospace;
+      }
+
+      .controles-principales {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: space-between;
+      }
+
+      .play-pause {
+        background: #E24B4A;
+        border: none;
+        cursor: pointer;
+        outline: none;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s ease, transform 0.15s ease;
+        flex-shrink: 0;
+      }
+
+      .play-pause:hover {
+        background: #c43a39;
+        transform: scale(1.08);
+      }
+
+      .play-pause:active {
+        transform: scale(0.95);
+      }
+
+      .volumen-container {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex: 1;
+      }
+
+      .volumen-container span {
+        flex-shrink: 0;
+        color: rgba(255,255,255,0.6);
+        font-size: 0.8rem;
+      }
+
+      .volumen {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 4px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 5px;
+        outline: none;
+        cursor: pointer;
+        border: none;
+      }
+
+      .volumen::-webkit-slider-runnable-track {
+        background: rgba(255,255,255,0.2);
+        height: 4px;
+        border-radius: 5px;
+      }
+
+      .volumen::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 14px;
+        height: 14px;
+        background: #fff;
+        border-radius: 50%;
+        border: 2px solid #E24B4A;
+        cursor: pointer;
+        margin-top: -5px;
+        transition: transform 0.15s ease;
+      }
+
+      .volumen::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+      }
+
+      .volumen::-moz-range-track {
+        background: rgba(255,255,255,0.2);
+        height: 4px;
+        border-radius: 5px;
+      }
+
+      .volumen::-moz-range-thumb {
+        width: 14px;
+        height: 14px;
+        background: #fff;
+        border-radius: 50%;
+        border: 2px solid #E24B4A;
+        cursor: pointer;
+      }
+
+      /* Indicador de "cargando" audio */
+      .audio-controles.loading .play-pause {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+
+      .audio-controles.loading .play-pause::after {
+        content: '';
+        display: block;
+        width: 14px;
+        height: 14px;
+        border: 2px solid rgba(255,255,255,0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        position: absolute;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
+      /* Botón de cerrar el reproductor */
+      .audio-controles-close {
+        position: absolute;
+        top: 8px;
+        right: 10px;
+        background: none;
+        border: none;
+        color: rgba(255,255,255,0.35);
+        cursor: pointer;
+        font-size: 14px;
+        line-height: 1;
+        padding: 2px;
+        transition: color 0.15s;
+      }
+
+      .audio-controles-close:hover {
+        color: rgba(255,255,255,0.8);
+      }
+
+      /* Mapa */
       .category-btn.filter-active {
         outline: 2px solid currentColor;
         outline-offset: -2px;
@@ -22,80 +269,80 @@
         font-weight: bold;
       }
 
-      /* Contenedor del marcador: necesita position para anclar el label */
       .map-point {
         position: absolute;
-        display: flex;
-        align-items: center;
+        width: 0;
+        height: 0;
+        z-index: 2;
       }
 
-      /* Label: oculto por defecto, aparece a la derecha del marcador */
-   .map-point .point-label {
-    position: absolute;
-    left: 50%;
-    top: calc(100% - 20px); /* justo debajo del marcador */
-    transform: translateX(-50%); /* centrado horizontalmente */
-    white-space: nowrap;
-    background-image: url('img/colorpop2.png');
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-color: transparent;
-    border: none;
-    border-radius: 0;
-    padding: 8px 16px;
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: #ffffff;
-    pointer-events: none;
-    opacity: 0;
-    z-index: 9999;
-    transition: opacity 0.18s ease;
-    box-shadow: none;
-}
+      .map-point .point-label {
+        position: absolute;
+        left: 50%;
+        top: 20px;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        background-image: url('img/colorpop2.png');
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-color: transparent;
+        border: none;
+        border-radius: 0;
+        padding: 8px 16px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #ffffff;
+        pointer-events: none;
+        opacity: 0;
+        z-index: 9999;
+        transition: opacity 0.18s ease;
+        box-shadow: none;
+      }
 
-      /* Mostrar label al pasar el cursor */
       .map-point:hover .point-label,
       .map-point.selected .point-label {
         opacity: 1;
       }
 
-      /* El map-point en hover sube también de z-index para que su label tape a los vecinos */
       .map-point:hover,
       .map-point.selected {
         z-index: 9998;
       }
 
       .map-point .point-date {
-    position: absolute;
-    left: 50%;
-    bottom: calc(100% + 10px);
-    transform: translateX(-50%);
-    white-space: nowrap;
-    background-image: url('img/colorpop2.png');
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    background-color: transparent;
-    border: none;
-    padding: 8px 16px;
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: #ffffff;
-    pointer-events: none;
-    opacity: 0;
-    z-index: 9999;
-    transition: opacity 0.18s ease;
-}
+        position: absolute;
+        left: 50%;
+        bottom: calc(100% + 10px);
+        transform: translateX(-50%);
+        white-space: nowrap;
+        background-image: url('img/colorpop2.png');
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        background-color: transparent;
+        border: none;
+        padding: 8px 16px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #ffffff;
+        pointer-events: none;
+        opacity: 0;
+        z-index: 9999;
+        transition: opacity 0.18s ease;
+      }
 
-.map-point:hover .point-date,
-.map-point.selected .point-date {
-    opacity: 1;
-}
+      .map-point:hover .point-date,
+      .map-point.selected .point-date {
+        opacity: 1;
+      }
 
-      /* Marcador imagen */
       .map-point .point {
-        width: 32px;
-        height: 32px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 3cqw;
+        height: 3cqw;
         background: none !important;
         border-radius: 0 !important;
         box-shadow: none !important;
@@ -106,841 +353,1379 @@
         cursor: pointer;
       }
 
-      /* Hover: agranda y añade sombra */
       .map-point:hover .point {
-        transform: scale(1.4);
+        transform: translate(-50%, -50%) scale(1.4);
         filter: drop-shadow(0 0 6px rgba(200, 0, 0, 0.7));
       }
 
-      /* Punto seleccionado: aún más grande */
       .map-point.selected .point {
-        transform: scale(1.6);
+        transform: translate(-50%, -50%) scale(1.6);
         filter: drop-shadow(0 0 10px rgba(200, 0, 0, 0.9));
+      }
+
+      @media (max-width: 768px) {
+        .map-point .point-label,
+        .map-point .point-date {
+          font-size: 0.6rem;
+          padding: 4px 8px;
+          white-space: normal;
+          max-width: 120px;
+          text-align: center;
+        }
+        .map-point .point {
+          width: 20px;
+          height: 20px;
+        }
+        .audio-controles {
+          width: 220px;
+          bottom: 90px;
+        }
+      }
+
+      /* =====================================================================
+         FOOTER — corregido y reestructurado
+         ===================================================================== */
+
+      /* Rompe el indent del body (margin-left: 220px) para ir a full-width */
+      .footer {
+        margin-left: -20px;   /* compensa el padding del body */
+        margin-right: -20px;
+        background: #141414;
+        color: #d0d0d0;
+        padding: 0;
+      }
+
+      /* En desktop el footer también necesita compensar el margin-left del body */
+      @media (min-width: 769px) {
+        .footer {
+          /* El body tiene margin-left: 220px, lo cancelamos */
+          margin-left: calc(-220px - 20px);
+        }
+      }
+
+      body.menu-collapsed .footer {
+        margin-left: -20px;
+      }
+
+      .footer-contenido {
+        display: block;          /* era inline-block — roto */
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 3rem 2rem 2rem;
+        font-family: 'Crayon', cursive;
+      }
+
+      /* Grid de dos columnas */
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        gap: 0 2rem;
+        align-items: start;
+        margin-bottom: 2rem;
+      }
+
+      .footer-col {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      /* Divisor vertical */
+      .footer-divider {
+        width: 1px;
+        background: rgba(255,255,255,0.1);
+        align-self: stretch;
+        margin: 0 1rem;
+      }
+
+      /* Etiqueta de sección */
+      .footer-label {
+        font-size: 0.68rem;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: #E24B4A;
+        margin: 0 0 0.3rem;
+        font-family: 'Crayon', cursive;
+      }
+
+      /* Nombre del proyecto */
+      .footer-project-name {
+        font-family: 'Revista', sans-serif;
+        font-size: 1.4rem;
+        color: #ffffff;
+        letter-spacing: 1px;
+        margin: 0 0 0.25rem;
+        line-height: 1.1;
+      }
+
+      .footer-text {
+        font-size: 0.88rem;
+        color: #999;
+        line-height: 1.55;
+        max-width: 100%;
+        margin: 0;
+        font-family: 'Crayon', cursive;
+      }
+
+      .footer-ref {
+        font-size: 0.82rem;
+        color: #888;
+        margin: 0.25rem 0 0;
+        font-family: 'Crayon', cursive;
+      }
+
+      /* Links */
+      .footer-link {
+        color: #7ab3f5;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(122, 179, 245, 0.3);
+        transition: color 0.2s, border-color 0.2s;
+      }
+
+      .footer-link:hover {
+        color: #acd4ff;
+        border-bottom-color: rgba(172, 212, 255, 0.6);
+      }
+
+      .footer-group-link {
+        font-size: 0.9rem;
+        font-family: 'Crayon', cursive;
+        line-height: 1.4;
+        margin-top: 0.1rem;
+        display: inline;
+      }
+
+      .footer-copy {
+        font-size: 0.78rem;
+        color: #666;
+        margin: 0.75rem 0 0;
+        font-family: 'Crayon', cursive;
+      }
+
+      /* Línea separadora horizontal */
+      .footer-sep {
+        height: 1px;
+        background: rgba(255,255,255,0.07);
+        margin: 0 0 1.5rem;
+      }
+
+      /* Volver arriba */
+      .footer-bottom {
+        text-align: center;
+      }
+
+      .back-to-top {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 22px;
+        background: transparent;
+        border: 1px solid rgba(226, 75, 74, 0.45);
+        color: #E24B4A;
+        border-radius: 25px;
+        text-decoration: none;
+        font-family: 'Crayon', cursive;
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+        transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+      }
+
+      .back-to-top:hover {
+        background: #E24B4A;
+        color: #fff;
+        transform: translateY(-2px);
+      }
+
+      /* Responsive footer */
+      @media (max-width: 768px) {
+        .footer {
+          margin-left: -10px;
+          margin-right: -10px;
+        }
+
+        .footer-contenido {
+          padding: 2rem 1.25rem 1.5rem;
+        }
+
+        .footer-grid {
+          grid-template-columns: 1fr;
+          gap: 1.5rem 0;
+        }
+
+        .footer-divider {
+          width: 100%;
+          height: 1px;
+          margin: 0;
+          align-self: auto;
+        }
+
+        .footer-project-name {
+          font-size: 1.15rem;
+        }
       }
     </style>
 </head>
-<div class="contenido-pagina">
-<header class="header">
-    <div class="header-contenido">
-        <div class="titular">
-            <h1 style="font-family:Revista;color: black;">EL PUERTO BAHIA DE ALGECIRAS</h1>
-            <h2 style="font-family: Crayon; color: black; margin-top: 3rem;">Un espacio de lucha sindical</h2>
-        </div>
-    </div>
-</header>
-
 <body>
-    <aside class="menu-lateral">
-        <a href="#mapa-interactivo" class="category-btn mapa-btn" data-section="section-target"><i class="fa-solid fa-map-location-dot"></i> Mapa</a>
 
-        <div class="categoria">
-          <button class="category-btn toggle-sub" data-filter-category="definiendo">Acción para le definición de políticas portuarias</button>
-          <ul class="subcategorias">
-            <li><button data-section="section6">Todos tenemos que tener los mismos derechos</button></li>
-            <li><button data-section="section13">Te sientes trabajador del puerto, no de tu empresa</button></li>
-          </ul>
+  <!-- BARRA DE PROGRESO DE LECTURA -->
+  <div id="reading-progress"></div>
+
+  <!-- BOTÓN HAMBURGUESA -->
+  <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <!-- Overlay oscuro -->
+  <div class="menu-overlay" id="menu-overlay"></div>
+
+  <div class="contenido-pagina">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div class="header-contenido">
+        <div class="titular">
+          <h1 style="font-family:Revista; color: black;">EL PUERTO BAHIA DE ALGECIRAS</h1>
+          <h2 style="font-family: Crayon; color: black; margin-top: 3rem;">Un espacio de lucha sindical</h2>
         </div>
+      </div>
+    </header>
 
-        <div class="categoria">
-            <button class="category-btn toggle-sub" data-filter-category="frenando">Freno a la deslocalización</button>
-            <ul class="subcategorias">
-              <li><button data-section="section3">Nada es permanente</button></li>
-              <li><button data-section="section2">Huelga en la estiba contra la aplicación del Tratado de emisiones de la UE</button></li>
-            </ul>
-        </div>
+    <!-- MENÚ LATERAL -->
+    <aside class="menu-lateral" id="menu-lateral">
 
-        <div class="categoria">
-          <button class="category-btn toggle-sub" data-filter-category="lucha">Lucha por condiciones de trabajo dignas</button>
-          <ul class="subcategorias">
-            <li><button data-section="section4">Hay veces que desgraciadamente no vale el diálogo</button></li>
-            <li><button data-section="section5">El amarre era la gaviota del puerto</button></li>
-            <li><button data-section="section7">Todos en el mismo bote</button></li>
-            <li><button data-section="section9">La empresa debe valorar en su justa medida la profesionalidad</button></li>
-            <li><button data-section="section12">No queremos que sean los mismos otra vez los que negocien este convenio</button></li>
-            <li><button data-section="section11">El salario es un derecho, no un privilegio</button></li>
-          </ul>
-        </div>
+      <a href="#mapa-interactivo" class="category-btn mapa-btn" data-section="section-target">
+        <i class="fa-solid fa-map-location-dot"></i> Mapa
+      </a>
 
-        <div class="categoria">
-          <button class="category-btn toggle-sub" data-filter-category="oposicion">Oposición a despidos</button>
-          <ul class="subcategorias">
-            <li><button data-section="section10">El sindicato en todo momento mantuvo su protesta</button></li>
-             <li><button data-section="section14">Sobre los gestos de solidaridad más allá del puerto</button></li>
-          </ul>
-        </div>
+      <div class="categoria" data-cat="definiendo">
+        <button class="category-btn toggle-sub" data-filter-category="definiendo" aria-expanded="false">
+          Definición de políticas portuarias
+          <span class="chevron">&#9658;</span>
+        </button>
+        <ul class="subcategorias">
+          <li><button data-section="section6">Reclamación sindical por la unificación de convenios en el sector del practicaje</button></li>
+          <li><button data-section="section13">Te sientes trabajador/a del puerto, no de tu empresa</button></li>
+        </ul>
+      </div>
 
-        <div class="categoria">
-          <button class="category-btn toggle-sub" data-filter-category="protestando">Protesta ante incumplimientos</button>
-          <ul class="subcategorias">
-            <li><button data-section="section8">No hay dinero para los convenios</button></li>
-            <li><button data-section="section1">Quieren cargárselo todo</button></li>
+      <div class="categoria" data-cat="frenando">
+        <button class="category-btn toggle-sub" data-filter-category="frenando" aria-expanded="false">
+          Freno a la deslocalización
+          <span class="chevron">&#9658;</span>
+        </button>
+        <ul class="subcategorias">
+          <li><button data-section="section3">Lucha contra la deslocalización en APM Terminals</button></li>
+          <li><button data-section="section2">Huelga en la estiba contra la aplicación del Tratado de emisiones de la UE</button></li>
+        </ul>
+      </div>
 
+      <div class="categoria" data-cat="lucha">
+        <button class="category-btn toggle-sub" data-filter-category="lucha" aria-expanded="false">
+          Lucha por condiciones dignas
+          <span class="chevron">&#9658;</span>
+        </button>
+        <ul class="subcategorias">
+          <li><button data-section="section4">Hay veces que desgraciadamente no vale el diálogo</button></li>
+          <li><button data-section="section5">El amarre era la gaviota del puerto</button></li>
+          <li><button data-section="section7">Todos en el mismo bote</button></li>
+          <li><button data-section="section9">Del bloqueo a la aprobación del convenio: subidas salariales del 20%</button></li>
+          <li><button data-section="section12">Culminación de las negociaciones del Convenio APEMAR</button></li>
+          <li><button data-section="section11">El salario es un derecho, no un privilegio</button></li>
+        </ul>
+      </div>
 
-          </ul>
-        </div>
+      <div class="categoria" data-cat="oposicion">
+        <button class="category-btn toggle-sub" data-filter-category="oposicion" aria-expanded="false">
+          Oposición a despidos
+          <span class="chevron">&#9658;</span>
+        </button>
+        <ul class="subcategorias">
+          <li><button data-section="section10">Unión de las personas trabajadoras en su rechazo a los despidos en Partida Logistics</button></li>
+          <li><button data-section="section14">Sobre los gestos de solidaridad más allá del puerto</button></li>
+        </ul>
+      </div>
+
+      <div class="categoria" data-cat="protestando">
+        <button class="category-btn toggle-sub" data-filter-category="protestando" aria-expanded="false">
+          Protesta ante incumplimientos
+          <span class="chevron">&#9658;</span>
+        </button>
+        <ul class="subcategorias">
+          <li><button data-section="section8">'Presentan sus pliegos y luego no hay dinero para los convenios'</button></li>
+          <li><button data-section="section1">Incompetencia. Despropósito de las autoridades de puertos del estado</button></li>
+        </ul>
+      </div>
+
     </aside>
 
-    <!-- Sección INTRODUCCION -->
-    <section class="seccion">
-        <audio class="audio-seccion" hidden>
-            <source src="audio/J_3.1.MP3" type="audio/mpeg">
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+      <!-- INTRODUCCIÓN -->
+      <section class="seccion" data-category="intro">
+        <audio class="audio-seccion" data-label="Introducción" hidden>
+          <source src="audio/J_3.1.MP3" type="audio/mpeg">
         </audio>
         <div class="contenido">
-            <h2>INTRODUCCIÓN</h2>
-<p>El puerto de Algeciras es el principal puerto de España y uno de los más importantes de Europa. En 2017, los trabajadores y las trabajadoras del puerto se enfrentaron a un intento de reforma laboral que amenazaba la estabilidad de sus empleos. Gracias a la lucha sindical, lograron proteger sus derechos y mantener la calidad del empleo en el sector.</p>
+          <h2>INTRODUCCIÓN</h2>
+          <p>El puerto de Algeciras es el principal puerto de España y uno de los más importantes de Europa. En 2017, los trabajadores y las trabajadoras del puerto se enfrentaron a un intento de reforma laboral que amenazaba la estabilidad de sus empleos. Gracias a la lucha sindical, lograron proteger sus derechos y mantener la calidad del empleo en el sector.</p>
         </div>
         <div class="media">
-            <img src="img/quierencargaselotodo.jpeg" alt="Imagen 1">
+          <img src="img/quierencargaselotodo.jpeg" alt="Imagen introducción">
         </div>
-    </section>
+      </section>
 
-    <!-- Sección MAPA -->
-    <section class="seccion section-target" id="mapa-interactivo">
-        <div class="image-map-container" style="display: flex; flex-direction: column; align-items: center;">
-            <img src="img/mapa5.png" alt="Mapa interactivo" class="base-image">
+      <!-- SECCIÓN MAPA -->
+      <section class="seccion section-target" id="mapa-interactivo" data-category="intro">
+        <div class="image-map-container">
+          <img src="img/mapa12.png" alt="Mapa interactivo" class="base-image">
 
-            <div class="map-point uno" style="left: 82%; top: 54.8%; text-align: center;" data-section="section6" data-category="definiendo">
-            <img class="point" src="img/flecha.png" alt="marcador" style="object-fit: contain; margin-bottom: 0; width: 120px; height: 50px; rotate: 180deg;">
-                <div class="point-label">2024 | Reclamación sindical por la unificación <br> de convenios en el sector del practicaje</div>
-            </div>
-            <div class="map-point dos" style="left: 60%; top: 41%" data-section="section13" data-category="definiendo">
-                <img class="point" src="img/marcadorfinal.png" alt="marcador">
-                <span class="point-label">2024 | Te sientes trabajador/a del puerto, no de tu empresa</span>
-            </div>
-            <div class="map-point tres" style="left: 47%; top: 47%" data-section="section3" data-category="frenando">
-                <img class="point" src="img/marcadorfinal.png" alt="marcador">
-                <span class="point-label">2017 | Lucha contra la deslocalización en APM Terminals</span>
-            </div>
-            <div class="map-point cuatro" style="left: 41%; top: 58%" data-section="section2" data-category="lucha">
-                <img class="point" src="img/marcadorfinal.png" alt="marcador">
-                <span class="point-label">2025 | Huelga en la estiba contra la aplicación del Tratado de emisiones de la UE</span>
-            </div>
-            <div class="map-point cinco" style="left: 40%; top: 39%; text-align: center;" data-section="section4" data-category="lucha">
-                <img class="point" src="img/marcadorfinal.png" alt="marcador">
-                <span class="point-label">2024 | Lucha por el convenio y la sobrecarga de trabajo <br>en el Puesto de Control Fronterizo</span>
-            </div>
-            <div class="map-point seis" style="left: 47%; top: 42%" data-section="section5" data-category="lucha">
-                <img class="point" src="img/marcadorfinal.png" alt="marcador">
-                <span class="point-label">2024 | El amarre era la gaviota del puerto</span>
-            </div>
-            <div class="map-point siete" style="left: 24%; top: 38.5%" data-section="section7" data-category="lucha">
-                <img class="point" src="img/marcadorfinal.png" alt="marcador">
-                <span class="point-label">2016 | Todos en el mismo bote</span>
-            </div>
-                <div class="map-point ocho" style="left: 45%; top: 71.5%" data-section="section9" data-category="lucha">
-                <img class="point" src="img/marcadorfinal.png" alt="marcador">
-                <span class="point-label">2024 | No hay dinero para los convenios</span>
-            </div>
+          <div class="map-point" style="left: 75%; top: 53%; text-align: center;" data-section="section14" data-category="oposicion">
+            <img class="point" src="img/flecha.png" alt="marcador" style="object-fit: contain; margin-bottom: 0; width: 12cqw; height: auto; rotate: 180deg;">
+            <div class="point-label">2024 | Sobre los gestos de solidaridad más allá del puerto</div>
+          </div>
 
-                 </div>
-                <div class="map-point ocho" style="left: 67%; top: 49%" data-section="section9" data-category="lucha">
-                <img class="point" src="img/marcadorfinal.png" alt="marcador">
-                <span class="point-label">2024 | No hay dinero para los convenios</span>
-            </div>
+          <div class="map-point" style="left: 63%; top: 43%;" data-section="section13" data-category="definiendo">
+            <img class="point" src="img/marcadorfinal.png" alt="marcador">
+            <span class="point-label">2024 | Te sientes trabajador/a del puerto, no de tu empresa</span>
+          </div>
 
-              <div class="map-point nueve" style="left: 40%; top: 69.9%; text-align: center;" data-section="section12" data-category="lucha">
-                <img class="point" src="img/marcadorfinal.png" alt="marcador">
-                <span class="point-label">2017 | Culminación de las negociaciones del Convenio <br> Agencias Marítimas Consignatarias de Buques S. A. APEMAR</span>
-             </div>
+          <div class="map-point" style="left: 48%; top: 48%;" data-section="section7" data-category="frenando">
+            <img class="point" src="img/marcadorfinal.png" alt="marcador">
+            <span class="point-label">2016 | Todos en el mismo bote</span>
+          </div>
 
-             
-              <div class="map-point nueve" style="left: 55%; top: 48.6%" data-section="section12" data-category="lucha">
-                <img class="point" src="img/marcadorfinal.png" alt="marcador">
-                <span class="point-label">2017 | Culminación de las negociaciones del Convenio <br> Agencias Marítimas Consignatarias de Buques S. A. APEMAR</span>
-             </div>
+          <div class="map-point" style="left: 43%; top: 60%;" data-section="section6" data-category="frenando">
+            <img class="point" src="img/marcadorfinal.png" alt="marcador">
+            <span class="point-label">2025 | Reclamación sindical por la unificación de convenios en el sector del practicaje</span>
+          </div>
 
+          <div class="map-point" style="left: 40%; top: 42%; text-align: center;" data-section="section11" data-category="lucha">
+            <img class="point" src="img/marcadorfinal.png" alt="marcador">
+            <span class="point-label">2024 | El salario es un derecho, no un privilegio</span>
+          </div>
 
-                  <div class="map-point nueve" style="left: 6%; top: 37%; text-align: center;" data-section="section12" data-category="lucha">
-                <img class="point" src="img/flecha.png" alt="marcador" style="object-fit: contain; margin-bottom: 0; width: 120px; height: 50px" >
-                <span class="point-label">2017 | Culminación de las negociaciones del Convenio <br> Agencias Marítimas Consignatarias de Buques S. A. APEMAR</span>
-             </div>
-            
-            <div class="map-point diez" style="left: 52.5%; top: 44.5%" data-section="section11" data-category="oposicion">
-                <img class="point" src="img/marcadorfinal.png" alt="marcador">
-                <span class="point-label">2021 | El salario es un derecho, no un privilegio</span>
-            </div>
-        
+          <div class="map-point" style="left: 47%; top: 44.5%; text-align: center;" data-section="section10" data-category="lucha">
+            <img class="point" src="img/marcadorfinal.png" alt="marcador">
+            <span class="point-label">2024 | Unión de las personas trabajadoras portuarias <br> en su rechazo a los despidos en la Agencia Marítima Partida Logistics</span>
+          </div>
 
-            <div class="map-point once" style="left: 19.5%; top: 38%; text-align: center;" data-section="section10" data-category="protestando">
-                <img class="point" src="img/marcadorfinal.png" alt="marcador">
-                <span class="point-label">2023 | Unión de las personas trabajadoras portuarias en su rechazo  <br>a los despidos en la Agencia Marítima Partida Logistics</span>
-            </div>
-            <div class="map-point doce" style="left: 40%; top: 44%" data-section="section14" data-category="lucha">
-                <img class="point" src="img/marcadorfinal.png" alt="marcador">
-                <span class="point-label">2021 | Sobre los gestos de solidaridad más allá del puerto</span>
-            </div>
-            <div class="map-point trece" style="left: 27.7%; top: 35.4%" data-section="section8" data-category="lucha">
-                <img class="point" src="img/linea3.png" alt="marcador" style="object-fit: contain; margin-bottom: 0; width: 280px; height: 60px">
-                <span class="point-label">2024 | 'Presentan sus pliegos y luego no hay dinero para los convenios' Las reivindicaciones</span>
-            </div>
-   
+          <div class="map-point" style="left: 25%; top: 41%;" data-section="section5" data-category="lucha">
+            <img class="point" src="img/marcadorfinal.png" alt="marcador">
+            <span class="point-label">2016 | El amarre era la gaviota del puerto</span>
+          </div>
+
+          <div class="map-point" style="left: 45%; top: 73.5%; text-align: center;" data-section="section2" data-category="lucha">
+            <img class="point" src="img/marcadorfinal.png" alt="marcador">
+            <span class="point-label">2024 | Huelga en la estiba contra <br> la aplicación del Tratado de emisiones de la UE</span>
+          </div>
+
+          <div class="map-point" style="left: 67%; top: 51%; text-align: center;" data-section="section2" data-category="lucha">
+            <img class="point" src="img/marcadorfinal.png" alt="marcador">
+            <span class="point-label">2024 | Huelga en la estiba contra <br> la aplicación del Tratado de emisiones de la UE</span>
+          </div>
+
+          <div class="map-point" style="left: 41%; top: 73%; text-align: center;" data-section="section1" data-category="lucha">
+            <img class="point" src="img/marcadorfinal.png" alt="marcador">
+            <span class="point-label">2017 | Incompetencia. Despropósito de las autoridades <br>de puertos del estado</span>
+          </div>
+
+          <div class="map-point" style="left: 55%; top: 50.5%; text-align: center;" data-section="section1" data-category="lucha">
+            <img class="point" src="img/marcadorfinal.png" alt="marcador">
+            <span class="point-label">2017 | Incompetencia. Despropósito de las autoridades <br>de puertos del estado</span>
+          </div>
+
+          <div class="map-point" style="left: 11.5%; top: 38.5%; text-align: center;" data-section="section1" data-category="lucha">
+            <img class="point" src="img/flecha.png" alt="marcador" style="object-fit: contain; margin-bottom: 0; width: 12cqw; height: 5cqw;">
+            <span class="point-label">2017 | Incompetencia. Despropósito de las autoridades <br>de puertos del estado</span>
+          </div>
+
+          <div class="map-point" style="left: 57%; top: 46%;" data-section="section3" data-category="lucha">
+            <img class="point" src="img/marcadorfinal.png" alt="marcador">
+            <span class="point-label">2021 | Lucha contra la deslocalización en APM Terminals</span>
+          </div>
+
+          <div class="map-point" style="left: 23%; top: 39%; text-align: center;" data-section="section8" data-category="oposicion">
+            <img class="point" src="img/marcadorfinal.png" alt="marcador">
+            <span class="point-label">2022-2025 | Presentan sus pliegos y luego no hay dinero</span>
+          </div>
+
+          <div class="map-point" style="left: 42%; top: 45%;" data-section="section9" data-category="oposicion">
+            <img class="point" src="img/marcadorfinal.png" alt="marcador">
+            <span class="point-label">2021 | Del bloqueo a la aprobación del convenio</span>
+          </div>
+
+          <div class="map-point" style="left: 39%; top: 37.5%;" data-section="section12" data-category="protestando">
+            <img class="point" src="img/linea3.png" alt="marcador" style="object-fit: contain; margin-bottom: 0; width: 25cqw; height: auto;">
+            <span class="point-label">2024 | Culminación de las negociaciones</span>
+          </div>
+
+          <div class="map-point" style="left: 44%; top: 41%;" data-section="section4" data-category="protestando">
+            <img class="point" src="img/marcadorfinal.png" alt="marcador">
+            <span class="point-label">Lucha por el convenio y la sobrecarga de trabajo</span>
+          </div>
+
         </div>
-        <!-- category-selector ELIMINADO -->
-    </section>
+      </section>
 
-       <!-- Sección 6. RECLAMACIÓN SINDICAL-->
-    <section id="section6" class="seccion seccion--reverse">
-          <audio class="audio-seccion" hidden>
-            <source src="audio/audio1nuevo.mp4" type="audio/mpeg">
+      <!-- ============================================================
+           SECCIÓN 6: PRACTICAJE
+           ============================================================ -->
+      <section id="section6" class="seccion seccion--reverse" data-category="definiendo">
+        <audio class="audio-seccion" data-label="Practicaje" hidden>
+          <source src="audio/audio1nuevo.mp4" type="audio/mpeg">
         </audio>
         <div class="contenido">
-            <h2>Reclamación sindical por la unificación de convenios en el sector del practicaje</h2>
-<p>El practicaje es una actividad fundamental en el transporte marítimo. Consiste en el asesoramiento a los/as capitanes/as de buque a su entrada y salida de los puertos. La Corporación de Prácticos del Puerto Bahía de Algeciras gestiona dicha actividad en la que se emplean, además de a personas que ejercen el practicaje portuario, a aquellas que desarrollan diferentes operaciones. Existe, por un lado, un convenio que regula las condiciones del personal de radio-operación, y, por otro lado, un segundo convenio que regula las condiciones de los “boteros” -personal de marinería-. La principal reclamación sindical en esta actividad portuaria es la unificación de ambos sectores en un mismo convenio. Evitar divisiones es fundamental para articular una respuesta sindical en cualquier ámbito.</p>
+          <h2>Reclamación sindical por la unificación de convenios en el sector del practicaje</h2>
+          <p>El practicaje es una actividad fundamental en el transporte marítimo. Consiste en el asesoramiento a los/as capitanes/as de buque a su entrada y salida de los puertos. La Corporación de Prácticos del Puerto Bahía de Algeciras gestiona dicha actividad en la que se emplean, además de a personas que ejercen el practicaje portuario, a aquellas que desarrollan diferentes operaciones. Existe, por un lado, un convenio que regula las condiciones del personal de radio-operación, y, por otro lado, un segundo convenio que regula las condiciones de los "boteros" -personal de marinería-. La principal reclamación sindical en esta actividad portuaria es la unificación de ambos sectores en un mismo convenio. Evitar divisiones es fundamental para articular una respuesta sindical en cualquier ámbito.</p>
         </div>
         <div class="media">
-            <img src="img/PHOTO-2025-04-04-13-42-01.jpg" alt="Imagen 1">
-            
-            <div class="botones">
-                <a href="https://www.juntadeandalucia.es/empleoformacionytrabajoautonomo/mapaNegociacionColectiva/descargarDocumento?uuid=97d2a1f1-24df-11e7-8184-1ddc756799b3" class="boton" target="_blank">BOP</a>
-                <a href="https://www.juntadeandalucia.es/empleoformacionytrabajoautonomo/mapaNegociacionColectiva/descargarDocumento?uuid=f1ca888b-14d5-11e5-b42e-c78e9a710b7c" class="boton" target="_blank">BOP</a>
-              <div class="boton audio-btn" onclick="toggleControles(this)">Audio</div>
-            <div class="audio-controles">
-                <div class="tiempo">
-                    <span class="current-time">0:00</span>
-                    <span class="duration">0:043</span>
+          <img src="img/PHOTO-2025-04-04-13-42-01.jpg" alt="Imagen practicaje">
+          <div class="botones">
+            <a href="https://www.juntadeandalucia.es/empleoformacionytrabajoautonomo/mapaNegociacionColectiva/descargarDocumento?uuid=97d2a1f1-24df-11e7-8184-1ddc756799b3" class="boton" target="_blank">BOP</a>
+            <a href="https://www.juntadeandalucia.es/empleoformacionytrabajoautonomo/mapaNegociacionColectiva/descargarDocumento?uuid=f1ca888b-14d5-11e5-b42e-c78e9a710b7c" class="boton" target="_blank">BOP</a>
+            <div class="boton audio-btn" role="button" tabindex="0" aria-label="Reproducir audio: Practicaje">Audio</div>
+            <div class="audio-controles" role="region" aria-label="Reproductor de audio">
+              <button class="audio-controles-close" aria-label="Cerrar reproductor"><i class="fa-solid fa-xmark"></i></button>
+              <div class="tiempo"><span class="current-time">0:00</span><span class="duration">—:——</span></div>
+              <div class="progress-bar" role="slider" aria-label="Progreso del audio"><div class="progress"></div></div>
+              <div class="controles-principales">
+                <button class="play-pause" aria-label="Reproducir / Pausar"><i class="fa-solid fa-play" style="color:#fff; font-size:13px;"></i></button>
+                <div class="volumen-container">
+                  <span><i class="fa-solid fa-volume-high"></i></span>
+                  <input type="range" class="volumen" min="0" max="1" step="0.05" value="1" aria-label="Volumen">
                 </div>
-                <div class="progress-bar" onclick="seekAudio(event)">
-                    <div class="progress"></div>
-                </div>
-                <div class="controles-principales">
-                    <button class="play-pause" onclick="togglePlay(this)"><i class="fa-solid fa-play" style="color: #ffffff;"></i></button>
-                    <div class="volumen-container">
-                        <span><i class="fa-solid fa-volume-high" style="color: #ffffff;"></i></span>
-                        <input type="range" class="volumen" min="0" max="1" step="0.1" oninput="setVolume(this)">
-                    </div>
-                </div>
-            </div>
               </div>
+            </div>
+          </div>
         </div>
-    </section>
+      </section>
 
-
-
-      <!-- Sección 13. TRABAJADOR DEL PUERTO -->
-    <section id="section13" class="seccion">
-        <audio class="audio-seccion" hidden>
-            <source src="audio/J_13.1.MP3" type="audio/mpeg">
+      <!-- ============================================================
+           SECCIÓN 13: TRABAJADOR DEL PUERTO
+           ============================================================ -->
+      <section id="section13" class="seccion" data-category="definiendo">
+        <audio class="audio-seccion" data-label="Identidad portuaria" hidden>
+          <source src="audio/J_13.1.MP3" type="audio/mpeg">
         </audio>
         <div class="contenido">
-            <h2>'Te sientes trabajador/a del puerto, no de tu empresa'</h2>
-<p>La Coordinadora optó por expandirse más allá de la estiba, a todos los trabajos del puerto, como parte de una estrategia del sindicato para hacer frente a los desafíos que impone la globalización neoliberal -liberalización del sector, competencia internacional entre puertos-. En un tiempo récord, la Coordinadora ha logrado convertirse en un sindicato hegemónico en los puertos del Estado español, con una estrategia que pasa por la construcción de una narrativa que enfatiza la identidad portuaria de los trabajadores.</p>
+          <h2>'Te sientes trabajador/a del puerto, no de tu empresa'</h2>
+          <p>Coordinadora optó por expandirse más allá de la estiba, a todos los trabajos del puerto, como parte de una estrategia del sindicato para hacer frente a los desafíos que impone la globalización neoliberal -liberalización del sector, competencia internacional entre puertos-. En un tiempo récord, Coordinadora ha logrado convertirse en un sindicato hegemónico en los puertos del Estado español, con una estrategia que pasa por la construcción de una narrativa que enfatiza la identidad portuaria de los trabajadores.</p>
         </div>
         <div class="media">
-            <img src="img/localesindicales.jpg" alt="Imagen 1">
-            
-            <div class="botones">
-                <a href="https://www.diariodelpuerto.com/maritimo/coordinadora-se-impone-en-las-elecciones-de-la-autoridad-portuaria-de-algeciras-OD25043094" class="boton" target="_blank">Prensa</a>
-            <div class="boton audio-btn" onclick="toggleControles(this)">Audio</div>
-            <div class="audio-controles">
-                <div class="tiempo">
-                    <span class="current-time">0:00</span>
-                    <span class="duration">1:13</span>
+          <img src="img/localesindicales.jpg" alt="Imagen local sindical">
+          <div class="botones">
+            <a href="https://www.diariodelpuerto.com/maritimo/coordinadora-se-impone-en-las-elecciones-de-la-autoridad-portuaria-de-algeciras-OD25043094" class="boton" target="_blank">Prensa</a>
+            <div class="boton audio-btn" role="button" tabindex="0" aria-label="Reproducir audio: Identidad portuaria">Audio</div>
+            <div class="audio-controles" role="region" aria-label="Reproductor de audio">
+              <button class="audio-controles-close" aria-label="Cerrar reproductor"><i class="fa-solid fa-xmark"></i></button>
+              <div class="tiempo"><span class="current-time">0:00</span><span class="duration">—:——</span></div>
+              <div class="progress-bar" role="slider" aria-label="Progreso del audio"><div class="progress"></div></div>
+              <div class="controles-principales">
+                <button class="play-pause" aria-label="Reproducir / Pausar"><i class="fa-solid fa-play" style="color:#fff; font-size:13px;"></i></button>
+                <div class="volumen-container">
+                  <span><i class="fa-solid fa-volume-high"></i></span>
+                  <input type="range" class="volumen" min="0" max="1" step="0.05" value="1" aria-label="Volumen">
                 </div>
-                <div class="progress-bar" onclick="seekAudio(event)">
-                    <div class="progress"></div>
-                </div>
-                <div class="controles-principales">
-                    <button class="play-pause" onclick="togglePlay(this)"><i class="fa-solid fa-play" style="color: #ffffff;"></i></button>
-                    <div class="volumen-container">
-                        <span><i class="fa-solid fa-volume-high" style="color: #ffffff;"></i></span>
-                        <input type="range" class="volumen" min="0" max="1" step="0.1" oninput="setVolume(this)">
-                    </div>
-                </div>
-            </div>
               </div>
+            </div>
+          </div>
         </div>
-    </section>
+      </section>
 
-     <!-- Sección 3. HUELGA POR EL CONVENIO -->
-   <section id="section3" class="seccion" style="flex-direction: column;">
-    <audio class="audio-seccion" hidden>
-        <source src="audio/audio2nuevo.mp4" type="audio/mpeg">
-    </audio>
-    <div class="contenido" style="flex: 1 1 100%;">
-        <h2 style="text-align: center;">Lucha contra la deslocalización en APM Terminals</h2>
-        <img src="img/photo2.jpg" alt="Imagen 1" style="width: auto; height: auto; max-width: 100%; border-radius: 10px; margin-bottom: 1.2rem;">
-        <p style="max-width: 100%; text-align: center;">APM Terminals Algeciras, perteneciente al grupo naviero danés A.P. Møller-Mærsk, es la mayor compañía de gestión de contenedores a nivel mundial. APMT gestiona una de las dos terminales de contenedores del Puerto Bahía de Algeciras. En 2021, el Comité de Empresa, liderado por aquel entonces por CCOO, convocó varios paros durante la negociación del convenio, que había vencido en 2020. Más allá de las actualizaciones salariales, los representantes de los trabajadores y las trabajadoras perseguían el compromiso de mantener los puestos de trabajo. La negociación se daba en un proceso de reestructuración del tráfico marítimo global. En concreto, APMT estaba deslocalizando parte de las actividades de Algeciras a otros lugares, sobre todo a Tánger. Allí la multinacional estaba potenciando el desarrollo de la terminal de contenedores automática Tánger-Med 2, que constituye una competencia directa para las terminales de Algeciras. Tras varias jornadas de lucha y sesiones maratonianas de negociación, lograron compromisos para frenar, momentáneamente, el proceso de deslocalización.</p>
-        <div class="botones">
+      <!-- ============================================================
+           SECCIÓN 3: APM TERMINALS
+           ============================================================ -->
+      <section id="section3" class="seccion" style="flex-direction: column;" data-category="frenando">
+        <audio class="audio-seccion" data-label="APM Terminals" hidden>
+          <source src="audio/audio2nuevo.mp4" type="audio/mpeg">
+        </audio>
+        <div class="contenido" style="flex: 1 1 100%;">
+          <h2 style="text-align: center;">Lucha contra la deslocalización en APM Terminals</h2>
+          <img src="img/photo2.jpg" alt="APM Terminals" style="width: auto; height: auto; max-width: 100%; border-radius: 10px; margin-bottom: 1.2rem;">
+          <p style="max-width: 100%; text-align: center;">APM Terminals Algeciras, perteneciente al grupo naviero danés A.P. Møller-Mærsk, es la mayor compañía de gestión de contenedores a nivel mundial. APMT gestiona una de las dos terminales de contenedores del Puerto Bahía de Algeciras. En 2021, el Comité de Empresa, liderado por aquel entonces por CCOO, convocó varios paros durante la negociación del convenio, que había vencido en 2020. Más allá de las actualizaciones salariales, los representantes de los trabajadores y las trabajadoras perseguían el compromiso de mantener los puestos de trabajo. La negociación se daba en un proceso de reestructuración del tráfico marítimo global. En concreto, APMT estaba deslocalizando parte de las actividades de Algeciras a otros lugares, sobre todo a Tánger. Allí la multinacional estaba potenciando el desarrollo de la terminal de contenedores automática Tánger-Med 2, que constituye una competencia directa para las terminales de Algeciras. Tras varias jornadas de lucha y sesiones maratonianas de negociación, lograron compromisos para frenar, momentáneamente, el proceso de deslocalización.</p>
+          <div class="botones">
             <a href="https://www.europasur.es/maritimas/inspeccion-trabajo-coordinadora-trabajadores-ett-plantilla-APM-Terminals-Algeciras_0_1867614040.html" class="boton" target="_blank">Prensa</a>
-            <div class="boton audio-btn" onclick="toggleControles(this)">Audio</div>
-            <div class="audio-controles">
-                <div class="tiempo">
-                    <span class="current-time">0:00</span>
-                    <span class="duration">1:13</span>
+            <div class="boton audio-btn" role="button" tabindex="0" aria-label="Reproducir audio: APM Terminals">Audio</div>
+            <div class="audio-controles" role="region" aria-label="Reproductor de audio">
+              <button class="audio-controles-close" aria-label="Cerrar reproductor"><i class="fa-solid fa-xmark"></i></button>
+              <div class="tiempo"><span class="current-time">0:00</span><span class="duration">—:——</span></div>
+              <div class="progress-bar" role="slider" aria-label="Progreso del audio"><div class="progress"></div></div>
+              <div class="controles-principales">
+                <button class="play-pause" aria-label="Reproducir / Pausar"><i class="fa-solid fa-play" style="color:#fff; font-size:13px;"></i></button>
+                <div class="volumen-container">
+                  <span><i class="fa-solid fa-volume-high"></i></span>
+                  <input type="range" class="volumen" min="0" max="1" step="0.05" value="1" aria-label="Volumen">
                 </div>
-                <div class="progress-bar" onclick="seekAudio(event)">
-                    <div class="progress"></div>
-                </div>
-                <div class="controles-principales">
-                    <button class="play-pause" onclick="togglePlay(this)"><i class="fa-solid fa-play" style="color: #ffffff;"></i></button>
-                    <div class="volumen-container">
-                        <span><i class="fa-solid fa-volume-high" style="color: #ffffff;"></i></span>
-                        <input type="range" class="volumen" min="0" max="1" step="0.1" oninput="setVolume(this)">
-                    </div>
-                </div>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-</section>
+      </section>
 
-        <!-- Sección 2. HUELGA EN LA ESTIBA -->
-    <section id="section2" class="seccion seccion--reverse">
-         <audio class="audio-seccion" hidden>
-            <source src="audio/audiobueno3.mp3" type="audio/mpeg">
+      <!-- ============================================================
+           SECCIÓN 2: HUELGA EN LA ESTIBA
+           ============================================================ -->
+      <section id="section2" class="seccion seccion--reverse" data-category="frenando">
+        <audio class="audio-seccion" data-label="Huelga en la estiba" hidden>
+          <source src="audio/audiobueno3.mp3" type="audio/mpeg">
         </audio>
         <div class="contenido">
-            <h2>Huelga en la estiba contra la aplicación del Tratado de emisiones de la UE</h2>
-<p>Las medidas para descarbonizar la Unión Europea han generado inquietud entre las personas trabajadoras portuarias. Se teme que la aprobación del Régimen de Comercio de Emisión de la UE implique el desvío del tráfico marítimo y escalas a los puertos del Sur del Mediterráneo, mermando el volumen de tráfico en los puertos europeos. La European Dockworkers Council, a la que pertenece la Coordinadora Estatal de Trabajadores del Mar, convocó un paro de 2 horas el 3 de abril de 2024 como medida de presión para que sus alegaciones fueran tenidas en cuenta y se activaran estru cturas de diálogo social. Al mismo tiempo que un centenar de estibadores y estibadoras se concentraban ante el Parlamento Europeo en Bruselas, en el Puerto Bahía de Algeciras, se llevaba a cabo la huelga y una concentración. Este conflicto ocupará buena parte de la agenda sindical de 2024.</p>
+          <h2>Huelga en la estiba contra la aplicación del Tratado de emisiones de la UE</h2>
+          <p>Las medidas para descarbonizar la Unión Europea han generado inquietud entre las personas trabajadoras portuarias. Se teme que la aprobación del Régimen de Comercio de Emisión de la UE implique el desvío del tráfico marítimo y escalas a los puertos del Sur del Mediterráneo, mermando el volumen de tráfico en los puertos europeos. La European Dockworkers Council, a la que pertenece Coordinadora Estatal de Trabajadores del Mar, convocó un paro de 2 horas el 3 de abril de 2024 como medida de presión para que sus alegaciones fueran tenidas en cuenta y se activaran estructuras de diálogo social. Al mismo tiempo que un centenar de estibadores y estibadoras se concentraban ante el Parlamento Europeo en Bruselas, en el Puerto Bahía de Algeciras, se llevaba a cabo la huelga y una concentración.</p>
         </div>
         <div class="media">
-            <img src="img/2.estiba.jpg" alt="Imagen 1">
-            <div class="botones">
-                <a href="https://cadenaser.com/andalucia/2024/04/02/el-3-de-abril-huelga-de-estibadores-en-algeciras-por-las-medidas-de-descarbonizacion-de-la-ue-radio-algeciras/" class="boton" target="_blank">Prensa</a>
+          <img src="img/2.estiba.jpg" alt="Huelga estiba">
+          <div class="botones">
+            <a href="https://cadenaser.com/andalucia/2024/04/02/el-3-de-abril-huelga-de-estibadores-en-algeciras-por-las-medidas-de-descarbonizacion-de-la-ue-radio-algeciras/" class="boton" target="_blank">Prensa</a>
+            <div class="boton audio-btn" role="button" tabindex="0" aria-label="Reproducir audio: Huelga en la estiba">Audio</div>
+            <div class="audio-controles" role="region" aria-label="Reproductor de audio">
+              <button class="audio-controles-close" aria-label="Cerrar reproductor"><i class="fa-solid fa-xmark"></i></button>
+              <div class="tiempo"><span class="current-time">0:00</span><span class="duration">—:——</span></div>
+              <div class="progress-bar" role="slider" aria-label="Progreso del audio"><div class="progress"></div></div>
+              <div class="controles-principales">
+                <button class="play-pause" aria-label="Reproducir / Pausar"><i class="fa-solid fa-play" style="color:#fff; font-size:13px;"></i></button>
+                <div class="volumen-container">
+                  <span><i class="fa-solid fa-volume-high"></i></span>
+                  <input type="range" class="volumen" min="0" max="1" step="0.05" value="1" aria-label="Volumen">
+                </div>
+              </div>
             </div>
-             <div class="audio-controles">
-                <div class="tiempo">
-                    <span class="current-time">0:00</span>
-                    <span class="duration">1:13</span>
-                </div>
-                <div class="progress-bar" onclick="seekAudio(event)">
-                    <div class="progress"></div>
-                </div>
-                <div class="controles-principales">
-                    <button class="play-pause" onclick="togglePlay(this)"><i class="fa-solid fa-play" style="color: #ffffff;"></i></button>
-                    <div class="volumen-container">
-                        <span><i class="fa-solid fa-volume-high" style="color: #ffffff;"></i></span>
-                        <input type="range" class="volumen" min="0" max="1" step="0.1" oninput="setVolume(this)">
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
-    </section>
-         <!-- Sección 4. LUCHA POR EL CONVENIO -->
-   <section id="section4" class="seccion" style="flex-direction: column;">
-    <audio class="audio-seccion" hidden>
-        <source src="audio/J_4.MP3" type="audio/mpeg">
-    </audio>
-    <div class="contenido" style="flex: 1 1 100%;">
-        <h2 style="text-align: center;">Lucha por el convenio y la sobrecarga de trabajo en el Puesto de Control Fronterizo</h2>
-        <img src="img/4. puesto de control fronterizo.jpg" alt="Imagen 1" style="width: auto; height: auto; max-width: 100%; border-radius: 10px; margin-bottom: 1.2rem;">
-        <p style="max-width: 100%; text-align: center;">En el Puesto de Control Fronterizo del Puerto Bahía de Algeciras, instalado en el muelle Juan Carlos I, se inspeccionan todas las mercancías que pasan por el puerto. Este servicio se encuentra externalizado por la Autoridad Portuaria Bahía de Algeciras a la empresa Docks Logistics Spain. Esta empresa, que opera los PCF de varios puertos de España, cuenta con un convenio de empresa de ámbito estatal, firmado por CCOO y UGT. En Algeciras, el sindicato Coordinadora inició acciones en 2019 para mejorar algunas de las condiciones laborales. En febrero de 2019, se alcanzó un acuerdo previo a la huelga con la mediación del Servicio Extrajudicial de Resolución de Conflictos Laborales de Andalucía, por el cual el personal mejoraría las condiciones respecto al convenio de empresa. En concreto, lograron un plus de disponibilidad; incrementar la retribución de las horas extraordinarias; la integración en plantilla del personal más veterano que prestaba funciones a través de Empresas de Trabajo Temporal; un acuerdo en materia de horarios y nocturnidad; e igualar las condiciones salariales para el personal cuyo salario global estuviera por debajo del convenio provincial/sectorial de APEMAR (agencias marítimas). Posteriormente, el personal del PCF ha proseguido la acción sindical, para actualizar las condiciones del convenio colectivo y hacer frente a la sobrecarga de trabajo derivada de situaciones como el aumento del tráfico marítimo.</p>
-        <div class="botones">
+      </section>
+
+      <!-- ============================================================
+           SECCIÓN 4: CONTROL FRONTERIZO
+           ============================================================ -->
+      <section id="section4" class="seccion" style="flex-direction: column;" data-category="lucha">
+        <audio class="audio-seccion" data-label="Control Fronterizo" hidden>
+          <source src="audio/J_4.MP3" type="audio/mpeg">
+        </audio>
+        <div class="contenido" style="flex: 1 1 100%;">
+          <h2 style="text-align: center;">Lucha por el convenio y la sobrecarga de trabajo en el Puesto de Control Fronterizo</h2>
+          <img src="img/4. puesto de control fronterizo.jpg" alt="Control Fronterizo" style="width: auto; height: auto; max-width: 100%; border-radius: 10px; margin-bottom: 1.2rem;">
+          <p style="max-width: 100%; text-align: center;">En el Puesto de Control Fronterizo del Puerto Bahía de Algeciras, instalado en el muelle Juan Carlos I, se inspeccionan todas las mercancías que pasan por el puerto. Este servicio se encuentra externalizado por la Autoridad Portuaria Bahía de Algeciras a la empresa Docks Logistics Spain. Esta empresa, que opera los PCF de varios puertos de España, cuenta con un convenio de empresa de ámbito estatal, firmado por CCOO y UGT. En Algeciras, el sindicato Coordinadora inició acciones en 2019 para mejorar algunas de las condiciones laborales. En febrero de 2019, se alcanzó un acuerdo previo a la huelga con la mediación del Servicio Extrajudicial de Resolución de Conflictos Laborales de Andalucía, por el cual el personal mejoraría las condiciones respecto al convenio de empresa. En concreto, lograron un plus de disponibilidad; incrementar la retribución de las horas extraordinarias; la integración en plantilla del personal más veterano que prestaba funciones a través de Empresas de Trabajo Temporal; un acuerdo en materia de horarios y nocturnidad; e igualar las condiciones salariales para el personal cuyo salario global estuviera por debajo del convenio provincial/sectorial de APEMAR (agencias marítimas).</p>
+          <div class="botones">
             <a href="https://www.coordinadora.org/web/2023/03/08/coordinadora-se-suma-a-la-concentracion-en-demanda-de-una-solucion-ante-el-colapso-del-pcf-de-algeciras/" class="boton" target="_blank">Prensa</a>
-            <div class="boton audio-btn" onclick="toggleControles(this)">Audio</div>
-            <div class="audio-controles">
-                <div class="progress-bar" onclick="seekAudio(event)">
-                    <div class="progress"></div>
+            <div class="boton audio-btn" role="button" tabindex="0" aria-label="Reproducir audio: Control Fronterizo">Audio</div>
+            <div class="audio-controles" role="region" aria-label="Reproductor de audio">
+              <button class="audio-controles-close" aria-label="Cerrar reproductor"><i class="fa-solid fa-xmark"></i></button>
+              <div class="tiempo"><span class="current-time">0:00</span><span class="duration">—:——</span></div>
+              <div class="progress-bar" role="slider" aria-label="Progreso del audio"><div class="progress"></div></div>
+              <div class="controles-principales">
+                <button class="play-pause" aria-label="Reproducir / Pausar"><i class="fa-solid fa-play" style="color:#fff; font-size:13px;"></i></button>
+                <div class="volumen-container">
+                  <span><i class="fa-solid fa-volume-high"></i></span>
+                  <input type="range" class="volumen" min="0" max="1" step="0.05" value="1" aria-label="Volumen">
                 </div>
-                <div class="tiempo">
-                    <span class="current-time">0:00</span>
-                    <span class="duration">0:37</span>
-                </div>
-                <div class="controles-principales">
-                    <button class="play-pause" onclick="togglePlay(this)"><i class="fa-solid fa-play" style="color: #ffffff;"></i></button>
-                    <div class="volumen-container">
-                        <span><i class="fa-solid fa-volume-high" style="color: #ffffff;"></i></span>
-                        <input type="range" class="volumen" min="0" max="1" step="0.1" oninput="setVolume(this)">
-                    </div>
-                </div>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-</section>
+      </section>
 
-      <!-- Sección 5. GAVIOTA -->
- <section id="section5" class="seccion" style="flex-direction: column;">
-    <audio class="audio-seccion" hidden>
-        <source src="audio/J_5.MP3" type="audio/mpeg">
-    </audio>
-    <div class="contenido" style="flex: 1 1 100%;">
-        <h2 style="text-align: center;">'El amarre era la gaviota del puerto' Puesta en valor y negociación colectiva en el sector del amarre</h2>
-        <img src="img/5, amarre.jpg" alt="Imagen 1" style="width: auto; height: auto; max-width: 100%; border-radius: 10px; margin-bottom: 1.2rem;">
-        <p style="max-width: 100%; text-align: center;">El amarre y desamarre de buques en el Puerto Bahía de Algeciras es una actividad de alto riesgo regulada por convenios sectoriales y empresariales. El convenio portuario de 2016, firmado por CCOO, UGT y SAME, estableció una bolsa de trabajo para "amarradores expertos", garantizando estabilidad laboral y cualificación. En 2018, la Comisión Nacional de los Mercados y la Competencia cuestionó el acuerdo por posibles restricciones a la competencia. Posteriormente, se firmaron acuerdos de mediación para estabilizar empleos ante la liberalización del sector y ajustar salarios según el IPC, impulsados principalmente por CCOO. Para 2024, SAME ya no participa en el sector, quedando CCOO y UGT como firmantes del acuerdo salarial. Mientras, el sindicato CTPA prioriza convenios empresariales, como en Marítima Algecireña S.A., y tiene presencia en otras empresas del sector. La estrategia de Coordinadora TPA busca lograr acuerdos sectoriales más amplios, trascendiendo el ámbito local de Algeciras.</p>
-        <div class="botones">
+      <!-- ============================================================
+           SECCIÓN 5: AMARRE
+           ============================================================ -->
+      <section id="section5" class="seccion" style="flex-direction: column;" data-category="lucha">
+        <audio class="audio-seccion" data-label="Sector del amarre" hidden>
+          <source src="audio/J_5.MP3" type="audio/mpeg">
+        </audio>
+        <div class="contenido" style="flex: 1 1 100%;">
+          <h2 style="text-align: center;">'El amarre era la gaviota del puerto' Puesta en valor y negociación colectiva en el sector del amarre</h2>
+          <img src="img/5, amarre.jpg" alt="Amarre" style="width: auto; height: auto; max-width: 100%; border-radius: 10px; margin-bottom: 1.2rem;">
+          <p style="max-width: 100%; text-align: center;">El amarre y desamarre de buques en el Puerto Bahía de Algeciras es una actividad de alto riesgo regulada por convenios sectoriales y empresariales. El convenio portuario de 2016, firmado por CCOO, UGT y SAME, estableció una bolsa de trabajo para "amarradores expertos", garantizando estabilidad laboral y cualificación. En 2018, la Comisión Nacional de los Mercados y la Competencia cuestionó el acuerdo por posibles restricciones a la competencia. Posteriormente, se firmaron acuerdos de mediación para estabilizar empleos ante la liberalización del sector y ajustar salarios según el IPC, impulsados principalmente por CCOO. Para 2024, SAME ya no participa en el sector, quedando CCOO y UGT como firmantes del acuerdo salarial. Mientras, el sindicato CTPA prioriza convenios empresariales, como en Marítima Algecireña S.A., y tiene presencia en otras empresas del sector.</p>
+          <div class="botones">
             <a href="https://cadenaser.com/emisora/2018/10/18/radio_algeciras/1539841080_848430.html" class="boton" target="_blank">Prensa</a>
-            <div class="boton audio-btn" onclick="toggleControles(this)">Audio</div>
-            <div class="audio-controles">
-                <div class="tiempo">
-                    <span class="current-time">0:00</span>
-                    <span class="duration">1:07</span>
+            <div class="boton audio-btn" role="button" tabindex="0" aria-label="Reproducir audio: Sector del amarre">Audio</div>
+            <div class="audio-controles" role="region" aria-label="Reproductor de audio">
+              <button class="audio-controles-close" aria-label="Cerrar reproductor"><i class="fa-solid fa-xmark"></i></button>
+              <div class="tiempo"><span class="current-time">0:00</span><span class="duration">—:——</span></div>
+              <div class="progress-bar" role="slider" aria-label="Progreso del audio"><div class="progress"></div></div>
+              <div class="controles-principales">
+                <button class="play-pause" aria-label="Reproducir / Pausar"><i class="fa-solid fa-play" style="color:#fff; font-size:13px;"></i></button>
+                <div class="volumen-container">
+                  <span><i class="fa-solid fa-volume-high"></i></span>
+                  <input type="range" class="volumen" min="0" max="1" step="0.05" value="1" aria-label="Volumen">
                 </div>
-                <div class="progress-bar" onclick="seekAudio(event)">
-                    <div class="progress"></div>
-                </div>
-                <div class="controles-principales">
-                    <button class="play-pause" onclick="togglePlay(this)"><i class="fa-solid fa-play" style="color: #ffffff;"></i></button>
-                    <div class="volumen-container">
-                        <span><i class="fa-solid fa-volume-high" style="color: #ffffff;"></i></span>
-                        <input type="range" class="volumen" min="0" max="1" step="0.1" oninput="setVolume(this)">
-                    </div>
-                </div>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-</section>
-    </section>
+      </section>
 
-      <!-- Sección 7.TODOS EN EL MISMO BOTE -->
-    <section id="section7" class="seccion">
-        <audio class="audio-seccion" hidden>
-            <source src="audio/J_7.MP3" type="audio/mpeg">
+      <!-- ============================================================
+           SECCIÓN 7: REMOLQUE (dos audios)
+           ============================================================ -->
+      <section id="section7" class="seccion" data-category="lucha">
+        <!-- Audio 1 -->
+        <audio class="audio-seccion" data-label="Remolque – Testimonio 1" hidden>
+          <source src="audio/J_7.MP3" type="audio/mpeg">
+        </audio>
+        <!-- Audio 2 -->
+        <audio class="audio-seccion" data-label="Remolque – Testimonio 2" hidden>
+          <source src="audio/J_7b.MP3" type="audio/mpeg">
         </audio>
         <div class="contenido">
-            <h2>'Todos en el mismo bote' La fuerza de la unidad en el sector del remolque</h2>
-<p>El servicio de remolque consiste en la ayuda a los movimientos de un buque siguiendo indicaciones de los capitanes y las capitanas de buque a través de la fuerza motriz de otro buque remolcador dentro de las aguas del espacio portuario. En el Puerto Bahía de Algeciras este servicio está encomendado a la empresa Boluda Corporación Marítima. El convenio colectivo fue firmado en 2015 para las empresas - Cía. Ibérica de Remolcadores del Estrecho, S.A. CIRESA - Servicios Auxiliares de Puertos, S.A. SERTOSA - Servicios Marítimos de Algeciras, S.A. SERMAR, las tres pertenecientes al grupo Boluda. El sindicato con la representación de estas personas trabajadoras es CGT-SAME. El Sindicato de Actividades Marítimas, un sindicato exclusivamente portuario, se integró dentro de CGT en el año 2017. Desde el punto de vista sindical, la lucha en la negociación de los convenios se centró en unificar bajo un mismo acuerdo a las tres empresas que prestaban el servicio, además de cuestiones de jornada, vacaciones y salario.</p>
+          <h2>'Todos en el mismo bote' La fuerza de la unidad en el sector del remolque</h2>
+          <p>El servicio de remolque consiste en la ayuda a los movimientos de un buque siguiendo indicaciones de los capitanes y las capitanas de buque a través de la fuerza motriz de otro buque remolcador dentro de las aguas del espacio portuario. En el Puerto Bahía de Algeciras este servicio está encomendado a la empresa Boluda Corporación Marítima. El convenio colectivo fue firmado en 2015 para las empresas - Cía. Ibérica de Remolcadores del Estrecho, S.A. CIRESA - Servicios Auxiliares de Puertos, S.A. SERTOSA - Servicios Marítimos de Algeciras, S.A. SERMAR, las tres pertenecientes al grupo Boluda. El sindicato con la representación de estas personas trabajadoras es CGT-SAME. El Sindicato de Actividades Marítimas, un sindicato exclusivamente portuario, se integró dentro de CGT en el año 2017. Desde el punto de vista sindical, la lucha en la negociación de los convenios se centró en unificar bajo un mismo acuerdo a las tres empresas que prestaban el servicio, además de cuestiones de jornada, vacaciones y salario.</p>
         </div>
         <div class="media">
-            <img src="img/7. remolque.jpg" alt="Imagen 1">
-            <div class="botones">
-               <a href="https://www.europasur.es/maritimas/asamblea-remolcadores-suspende-convocatoria-huelga_0_366863831.html?utm_source=chatgpt.com" class="boton" target="_blank">Prensa</a>
-
-                <div class="boton audio-btn" onclick="toggleControles(this)">Audio</div>
-                <div class="audio-controles">
-                    <div class="tiempo">
-                        <span class="current-time">0:00</span>
-                        <span class="duration">2:26</span>
-                    </div>
-                    <div class="progress-bar" onclick="seekAudio(event)">
-                        <div class="progress"></div>
-                    </div>
-                    <div class="controles-principales">
-                        <button class="play-pause" onclick="togglePlay(this)"><i class="fa-solid fa-play" style="color: #ffffff;"></i></button>
-                        <div class="volumen-container">
-                            <span><i class="fa-solid fa-volume-high" style="color: #ffffff;"></i></span>
-                            <input type="range" class="volumen" min="0" max="1" step="0.1" oninput="setVolume(this)">
-                        </div>
-                    </div>
-
-                       <div class="boton audio-btn" onclick="toggleControles(this)">Audio</div>
-                <div class="audio-controles">
-                    <div class="tiempo">
-                        <span class="current-time">0:00</span>
-                        <span class="duration">0:14</span>
-                    </div>
-                    <div class="progress-bar" onclick="seekAudio(event)">
-                        <div class="progress"></div>
-                    </div>
-                    <div class="controles-principales">
-                        <button class="play-pause" onclick="togglePlay(this)"><i class="fa-solid fa-play" style="color: #ffffff;"></i></button>
-                        <div class="volumen-container">
-                            <span><i class="fa-solid fa-volume-high" style="color: #ffffff;"></i></span>
-                            <input type="range" class="volumen" min="0" max="1" step="0.1" oninput="setVolume(this)">
-                        </div>
-                    </div>
+          <img src="img/7. remolque.jpg" alt="Remolque">
+          <div class="botones">
+            <a href="https://www.europasur.es/maritimas/asamblea-remolcadores-suspende-convocatoria-huelga_0_366863831.html" class="boton" target="_blank">Prensa</a>
+            <!-- Botón Audio 1 -->
+            <div class="boton audio-btn" role="button" tabindex="0" aria-label="Reproducir audio 1: Remolque">Audio 1</div>
+            <div class="audio-controles" role="region" aria-label="Reproductor de audio 1">
+              <button class="audio-controles-close" aria-label="Cerrar reproductor"><i class="fa-solid fa-xmark"></i></button>
+              <div class="audio-titulo">Testimonio 1</div>
+              <div class="tiempo"><span class="current-time">0:00</span><span class="duration">—:——</span></div>
+              <div class="progress-bar" role="slider" aria-label="Progreso del audio"><div class="progress"></div></div>
+              <div class="controles-principales">
+                <button class="play-pause" aria-label="Reproducir / Pausar"><i class="fa-solid fa-play" style="color:#fff; font-size:13px;"></i></button>
+                <div class="volumen-container">
+                  <span><i class="fa-solid fa-volume-high"></i></span>
+                  <input type="range" class="volumen" min="0" max="1" step="0.05" value="1" aria-label="Volumen">
                 </div>
+              </div>
             </div>
+            <!-- Botón Audio 2 -->
+            <div class="boton audio-btn" role="button" tabindex="0" aria-label="Reproducir audio 2: Remolque">Audio 2</div>
+            <div class="audio-controles" role="region" aria-label="Reproductor de audio 2">
+              <button class="audio-controles-close" aria-label="Cerrar reproductor"><i class="fa-solid fa-xmark"></i></button>
+              <div class="audio-titulo">Testimonio 2</div>
+              <div class="tiempo"><span class="current-time">0:00</span><span class="duration">—:——</span></div>
+              <div class="progress-bar" role="slider" aria-label="Progreso del audio"><div class="progress"></div></div>
+              <div class="controles-principales">
+                <button class="play-pause" aria-label="Reproducir / Pausar"><i class="fa-solid fa-play" style="color:#fff; font-size:13px;"></i></button>
+                <div class="volumen-container">
+                  <span><i class="fa-solid fa-volume-high"></i></span>
+                  <input type="range" class="volumen" min="0" max="1" step="0.05" value="1" aria-label="Volumen">
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-    </section>
+      </section>
 
+      <!-- ============================================================
+           SECCIÓN 9: FRS / FERRIS
+           ============================================================ -->
+      <section id="section9" class="seccion" data-category="lucha">
+        <div class="contenido">
+          <h2>Del bloqueo a la aprobación del convenio: subidas salariales del 20% para el personal</h2>
+          <p>La vigencia del Convenio Colectivo terminó el 31 de diciembre de 2021, pero hasta mediados de octubre de 2022 no comenzaron las negociaciones del Convenio Colectivo del personal de tierra de FRS Iberia y de Ferris Rápidos del Sur. El servicio se vio muy afectado por la pandemia y el cierre de la frontera con Marruecos. CC OO fue crucial en esas negociaciones y bajo su asesoramiento, el comité de empresa de FRS y las delegadas de Ferris plantearon su demanda principal: un aumento salarial. Finalmente, al borde de terminar el año, se llega a un acuerdo con un aumento salarial del 20%, que afecta a unas 200 personas que conforman la plantilla de tierra del enlace marítimo Ceuta-Tánger.</p>
+        </div>
+        <div class="media">
+          <img src="img/9. bloqueo.jpg" alt="FRS Ferris">
+          <div class="botones">
+            <a href="https://www.algecirasalminuto.es/sociedad/firmado-el-convenio-colectivo-de-las-empresas-frs-iberia-y-ferrysur/" class="boton" target="_blank">Prensa</a>
+          </div>
+        </div>
+      </section>
 
-       <!-- Sección 9. DEL BLOQUEO A LA APROBACIÓN -->
-    <section id="section9" class="seccion">
-        <audio class="audio-seccion" hidden>
-            <source src="audio/J_3.1.MP3" type="audio/mpeg">
+      <!-- ============================================================
+           SECCIÓN 12: APEMAR
+           ============================================================ -->
+      <section id="section12" class="seccion seccion--reverse" data-category="lucha">
+        <div class="contenido">
+          <h2>Culminación de las negociaciones del Convenio Agencias Marítimas Consignatarias de Buques S. A. APEMAR</h2>
+          <p>El Convenio Colectivo Agencias Marítimas de Cádiz, más conocido como el convenio de Apemar, afecta a miles de personas trabajadoras, puesto que aglutina a más de un centenar de empresas consignatarias, transitarias, agentes de aduanas y estibadoras que desarrollan su actividad en el Puerto de la Bahía de Algeciras y en el de Cádiz. Tras una intensa negociación, se publicó en mayo de 2022 con vigencia de tres años 2021-23 y consolidó mejoras salariales y de las condiciones laborales. En 2024 se firma un nuevo convenio en una mesa de negociación en la que CTPA contaba con casi un 90% de representatividad, lográndose la mayor parte de reclamaciones de los trabajadores.</p>
+        </div>
+        <div class="media">
+          <img src="img/PHOTO-2025-04-04-12-38-36.jpg" alt="APEMAR">
+          <div class="botones">
+            <a href="https://www.coordinadora.org/web/2023/01/31/coordinadora-tpa-culmina-tras-dos-anos-el-acuerdo-de-empresa-con-terminales-maritimas-del-estrecho-tme/" class="boton" target="_blank">Prensa</a>
+            <a href="https://www.diarioarea.com/2021/01/20/febrero-mes-clave-para-la-negociacion-en-apemar/" class="boton" target="_blank">Prensa</a>
+            <a href="https://ccoo.app/convenio/convenio-colectivo-agencias-maritimas-de-cadiz/" class="boton" target="_blank">Convenio</a>
+            <a href="https://www.bopcadiz.es/export/sites/default/.boletines_pdf/2022/05_mayo/BOP086_09-05-22.pdf" class="boton" target="_blank">BOP</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           SECCIÓN 11: INTERSHIPPING
+           ============================================================ -->
+      <section id="section11" class="seccion" style="flex-direction: column;" data-category="lucha">
+        <audio class="audio-seccion" data-label="Intershipping – salarios" hidden>
+          <source src="audio/audiosalario.mp3" type="audio/mpeg">
         </audio>
-        <div class="contenido">
-            <h2>Del bloqueo a la aprobación del convenio: subidas salariales del 20% para el personal</h2>
-<p>La vigencia del Convenio Colectivo terminó el 31 de diciembre de 2021, pero hasta mediados de octubre de 2022 no comenzaron las negociaciones del Convenio Colectivo del personal de tierra de FRS Iberia y de Ferris Rápidos del Sur. El servicio se vio muy afectado por la pandemia y el cierre de la frontera con Marruecos. CC OO fue crucial en esas negociaciones y bajo su asesoramiento, el comité de empresa de FRS y las delegadas de Ferris plantearon su demanda principal: un aumento salarial. Finalmente, al borde de terminar el año, se llega a un acuerdo con un aumento salarial del 20%, que afecta a unas 200 personas que conforman la plantilla de tierra del enlace marítimo Ceuta-Tánger. CC OO valoró positivamente el acuerdo.</p>
-        </div>
-        <div class="media">
-            <img src="img/9. bloqueo.jpg" alt="Imagen 1">
-            <div class="botones">
-            <a href="https://www.algecirasalminuto.es/sociedad/firmado-el-convenio-colectivo-de-las-empresas-frs-iberia-y-ferrysur/?fbclid=IwY2xjawQEUMFleHRuA2FlbQIxMQBicmlkETFkYThqU0M4YUZJM2UzWkdzc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHsiyWJwayKs8_E4Bpv8Lg9AEe-qsMO_pnxM_d4p5oDLQOZq5wp3hUSVNfHRf_aem_PUE4n5lD1heb84uC20wkLw" class="boton" target="_blank">Prensa</a>
-            </div>
-        </div>
-    </section>
-
-
-      <!-- Sección 12. CULMINACIÓN DE LAS NEGOCIACIONES -->
-    <section id="section12" class="seccion seccion--reverse">
-        <div class="contenido">
-            <h2>Culminación de las negociaciones del Convenio Agencias Marítimas Consignatarias de Buques S. A. APEMAR</h2>
-<p>El Convenio Colectivo Agencias Marítimas de Cádiz, más conocido como el convenio de Apemar, afecta a miles de personas trabajadoras, puesto que aglutina a más de un centenar de empresas consignatarias, transitarias, agentes de aduanas y estibadoras que desarrollan su actividad en el Puerto de la Bahía de Algeciras y en el de Cádiz. Tras una intensa negociación, se publicó en mayo de 2022 con vigencia de tres años 2021-23 y consolidó mejoras salariales y de las condiciones laborales. En 2024 se firma un nuevo convenio en una mesa de negociación en la que CTPA contaba con casi un 90% de representatividad, lográndose la mayor parte de reclamaciones de los trabajadores.</p>
-        </div>
-        <div class="media">
-            <img src="img/PHOTO-2025-04-04-12-38-36.jpg" alt="Imagen 1">
-            <div class="botones">
-                <a href="https://www.coordinadora.org/web/2023/01/31/coordinadora-tpa-culmina-tras-dos-anos-el-acuerdo-de-empresa-con-terminales-maritimas-del-estrecho-tme/" class="boton" target="_blank">Prensa</a>
-                <a href="https://www.diarioarea.com/2021/01/20/febrero-mes-clave-para-la-negociacion-en-apemar/" class="boton" target="_blank">Prensa</a>
-                <a href="https://ccoo.app/convenio/convenio-colectivo-agencias-maritimas-de-cadiz/" class="boton" target="_blank">Convenio</a>
-                <a href="https://www.bopcadiz.es/export/sites/default/.boletines_pdf/2022/05_mayo/BOP086_09-05-22.pdf" class="boton" target="_blank">BOP</a>
-            </div>
-        </div>
-    </section>
-
-    
- 
-    
-
-        <!-- Sección 11. EL SALARIO ES UN DERECHO -->
-    <section id="section11" class="seccion" style="flex-direction: column;">
-    <audio class="audio-seccion" hidden>
-        <source src="audio/audiosalario.mp3" type="audio/mpeg">
-    </audio>
-    <div class="contenido" style="flex: 1 1 100%;">
-        <h2 style="text-align: center;">'El salario es un derecho, no un privilegio' Las y los trabajadores de Intershipping exigen el pago de sus salarios pendientes</h2>
-        <img src="img/11. naviera.png" alt="Imagen 1" style="width: auto; height: auto; max-width: 100%; border-radius: 10px; margin-bottom: 1.2rem;">
-        <p style="max-width: 100%; text-align: center;">La naviera Intershipping, encargada de las líneas que unen Algeciras-Tánger y Tarifa-Tánger, desapareció e incurrió en impagos de salarios durante varios meses, que dejaron a más de 50 familias en una situación de extrema precariedad, a finales de 2023. Las y los trabajadores se concentraron en demanda del pago de sus salarios y en protesta por la escasez de comunicación por parte de la empresa. Tras la solicitud a Inspección de Trabajo se constató un cierre de patronal encubierto, se procedió a una demanda por despido improcedente que fue reconocida. Algunos de los trabajadores fueron también reubicados en otra empresa. Los trabajadores pidieron el apoyo de la Autoridad Portuaria de Bahía de Algeciras que retiró la licencia a la naviera.</p>
-        <div class="botones">
+        <div class="contenido" style="flex: 1 1 100%;">
+          <h2 style="text-align: center;">'El salario es un derecho, no un privilegio' Las y los trabajadores de Intershipping exigen el pago de sus salarios pendientes</h2>
+          <img src="img/11. naviera.png" alt="Intershipping" style="width: auto; height: auto; max-width: 100%; border-radius: 10px; margin-bottom: 1.2rem;">
+          <p style="max-width: 100%; text-align: center;">La naviera Intershipping, encargada de las líneas que unen Algeciras-Tánger y Tarifa-Tánger, desapareció e incurrió en impagos de salarios durante varios meses, que dejaron a más de 50 familias en una situación de extrema precariedad, a finales de 2023. Las y los trabajadores se concentraron en demanda del pago de sus salarios y en protesta por la escasez de comunicación por parte de la empresa. Tras la solicitud a Inspección de Trabajo se constató un cierre de patronal encubierto, se procedió a una demanda por despido improcedente que fue reconocida.</p>
+          <div class="botones">
             <a href="https://www.diarioarea.com/2023/11/27/trabajadores-de-intershipping-puerto-de-algeciras-concentracion/" class="boton" target="_blank">Prensa</a>
-            <div class="boton audio-btn" onclick="toggleControles(this)">Audio</div>
-            <div class="audio-controles">
-                <div class="tiempo">
-                    <span class="current-time">0:00</span>
-                    <span class="duration">0:59</span>
+            <div class="boton audio-btn" role="button" tabindex="0" aria-label="Reproducir audio: Intershipping">Audio</div>
+            <div class="audio-controles" role="region" aria-label="Reproductor de audio">
+              <button class="audio-controles-close" aria-label="Cerrar reproductor"><i class="fa-solid fa-xmark"></i></button>
+              <div class="tiempo"><span class="current-time">0:00</span><span class="duration">—:——</span></div>
+              <div class="progress-bar" role="slider" aria-label="Progreso del audio"><div class="progress"></div></div>
+              <div class="controles-principales">
+                <button class="play-pause" aria-label="Reproducir / Pausar"><i class="fa-solid fa-play" style="color:#fff; font-size:13px;"></i></button>
+                <div class="volumen-container">
+                  <span><i class="fa-solid fa-volume-high"></i></span>
+                  <input type="range" class="volumen" min="0" max="1" step="0.05" value="1" aria-label="Volumen">
                 </div>
-                <div class="progress-bar" onclick="seekAudio(event)">
-                    <div class="progress"></div>
-                </div>
-                <div class="controles-principales">
-                    <button class="play-pause" onclick="togglePlay(this)"><i class="fa-solid fa-play" style="color: #ffffff;"></i></button>
-                    <div class="volumen-container">
-                        <span><i class="fa-solid fa-volume-high" style="color: #ffffff;"></i></span>
-                        <input type="range" class="volumen" min="0" max="1" step="0.1" oninput="setVolume(this)">
-                    </div>
-                </div>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-</section>
-       <!-- Sección 10.UNIÓN TRABAJADORES PORTUARIOS -->
-    <section id="section10" class="seccion seccion--reverse">
-        <audio class="audio-seccion" hidden>
-            <source src="audio/E_10.MP3" type="audio/mpeg">
+      </section>
+
+      <!-- ============================================================
+           SECCIÓN 10: PARTIDA LOGISTICS
+           ============================================================ -->
+      <section id="section10" class="seccion seccion--reverse" data-category="oposicion">
+        <audio class="audio-seccion" data-label="Partida Logistics" hidden>
+          <source src="audio/E_10.MP3" type="audio/mpeg">
         </audio>
         <div class="contenido">
-            <h2>Unión de las personas trabajadoras portuarias en su rechazo a los despidos en la Agencia Marítima Partida Logistics</h2>
-<p>En junio de 2023, el sindicato Coordinadora de Trabajadores de los Puertos Andaluces CTPA organizó una protesta frente al despido de nueve trabajadores de la empresa Agencia Marítima Partida Logistics, en el Puerto de Algeciras. Para el sindicato, los despidos eran improcedentes, puesto que es habitual que baje la productividad en los meses de verano, así como en otros momentos del año se pide a los trabajadores 'un esfuerzo muy grande'. La concentración promovida por CTPA en protesta por los despidos visibilizó la unión de trabajadores de muy diversos oficios dentro del puerto y consiguió la atenuación del conflicto posterior con la introducción de la figura de fijo discontinuo y la reducción de la estacionalidad.</p>
+          <h2>Unión de las personas trabajadoras portuarias en su rechazo a los despidos en la Agencia Marítima Partida Logistics</h2>
+          <p>En junio de 2023, el sindicato Coordinadora de Trabajadores de los Puertos Andaluces CTPA organizó una protesta frente al despido de nueve trabajadores de la empresa Agencia Marítima Partida Logistics, en el Puerto de Algeciras. Para el sindicato, los despidos eran improcedentes, puesto que es habitual que baje la productividad en los meses de verano, así como en otros momentos del año se pide a los trabajadores 'un esfuerzo muy grande'. La concentración promovida por CTPA en protesta por los despidos visibilizó la unión de trabajadores de muy diversos oficios dentro del puerto y consiguió la atenuación del conflicto posterior con la introducción de la figura de fijo discontinuo y la reducción de la estacionalidad.</p>
         </div>
         <div class="media">
-            <img src="img/11. trato justo.png" alt="Imagen 1">
-            <div class="botones">
-                <a href="https://www.elestrechodigital.com/2023/06/15/coordinadora-protesta-por-los-despidos-en-partida-logistics-en-algeciras/" class="boton" target="_blank">Prensa</a>
-                <div class="boton audio-btn" onclick="toggleControles(this)">Audio</div>
-                <div class="audio-controles">
-                    <div class="tiempo">
-                        <span class="current-time">0:00</span>
-                        <span class="duration">1:48</span>
-                    </div>
-                    <div class="progress-bar" onclick="seekAudio(event)">
-                        <div class="progress"></div>
-                    </div>
-                    <div class="controles-principales">
-                        <button class="play-pause" onclick="togglePlay(this)"><i class="fa-solid fa-play" style="color: #ffffff;"></i></button>
-                        <div class="volumen-container">
-                            <span><i class="fa-solid fa-volume-high" style="color: #ffffff;"></i></span>
-                            <input type="range" class="volumen" min="0" max="1" step="0.1" oninput="setVolume(this)">
-                        </div>
-                    </div>
+          <img src="img/11. trato justo.png" alt="Partida Logistics">
+          <div class="botones">
+            <a href="https://www.elestrechodigital.com/2023/06/15/coordinadora-protesta-por-los-despidos-en-partida-logistics-en-algeciras/" class="boton" target="_blank">Prensa</a>
+            <div class="boton audio-btn" role="button" tabindex="0" aria-label="Reproducir audio: Partida Logistics">Audio</div>
+            <div class="audio-controles" role="region" aria-label="Reproductor de audio">
+              <button class="audio-controles-close" aria-label="Cerrar reproductor"><i class="fa-solid fa-xmark"></i></button>
+              <div class="tiempo"><span class="current-time">0:00</span><span class="duration">—:——</span></div>
+              <div class="progress-bar" role="slider" aria-label="Progreso del audio"><div class="progress"></div></div>
+              <div class="controles-principales">
+                <button class="play-pause" aria-label="Reproducir / Pausar"><i class="fa-solid fa-play" style="color:#fff; font-size:13px;"></i></button>
+                <div class="volumen-container">
+                  <span><i class="fa-solid fa-volume-high"></i></span>
+                  <input type="range" class="volumen" min="0" max="1" step="0.05" value="1" aria-label="Volumen">
                 </div>
+              </div>
             </div>
+          </div>
         </div>
-    </section>
+      </section>
 
-    
-
-
-   <!-- Sección 14. GESTOS -->
-<section id="section14" class="seccion" style="flex-direction: column;">
-   <audio class="audio-seccion" hidden>
-        <source src="audio/audiogestos.mp3" type="audio/mpeg">
-    </audio>
-    <div class="contenido" style="flex: 1 1 100%;">
-        <h2 style="text-align: center;">Sobre los gestos de solidaridad más allá del puerto</h2>
-        <img src="img/14. USO.png" alt="Imagen solidaridad" style="width: 100%; height: 300px; object-fit: cover; border-radius: 10px; margin-bottom: 1.2rem;">
-        <p style="text-align: center;">La Coordinadora TPA tuvo un gesto, en mayo de 2024, que recupera la tradición solidaria del sindicalismo histórico, cuando hizo un aporte a la caja de resistencia de los trabajadores y las trabajadoras de Acerinox en solidaridad con su proceso de huelga.</p>
-        <div class="botones">
+      <!-- ============================================================
+           SECCIÓN 14: SOLIDARIDAD
+           ============================================================ -->
+      <section id="section14" class="seccion" style="flex-direction: column;" data-category="oposicion">
+        <audio class="audio-seccion" data-label="Solidaridad – Acerinox" hidden>
+          <source src="audio/audiogestos.mp3" type="audio/mpeg">
+        </audio>
+        <div class="contenido" style="flex: 1 1 100%;">
+          <h2 style="text-align: center;">Sobre los gestos de solidaridad más allá del puerto</h2>
+          <img src="img/14. USO.png" alt="Solidaridad" style="width: 100%; height: 300px; object-fit: cover; border-radius: 10px; margin-bottom: 1.2rem;">
+          <p style="text-align: center;">Coordinadora TPA tuvo un gesto, en mayo de 2024, que recupera la tradición solidaria del sindicalismo histórico, cuando hizo un aporte a la caja de resistencia de los trabajadores y las trabajadoras de Acerinox en solidaridad con su proceso de huelga.</p>
+          <div class="botones">
             <a href="https://efe.com/andalucia/2024-04-19/acerinox-presenta-una-propuesta-de-convenio-colectivo-para-desbloquear-la-huelga/" class="boton" target="_blank">Prensa</a>
-            <div class="boton audio-btn" onclick="toggleControles(this)">Audio</div>
-            <div class="audio-controles">
-                <div class="tiempo">
-                    <span class="current-time">0:00</span>
-                    <span class="duration">0:24</span>
+            <div class="boton audio-btn" role="button" tabindex="0" aria-label="Reproducir audio: Solidaridad">Audio</div>
+            <div class="audio-controles" role="region" aria-label="Reproductor de audio">
+              <button class="audio-controles-close" aria-label="Cerrar reproductor"><i class="fa-solid fa-xmark"></i></button>
+              <div class="tiempo"><span class="current-time">0:00</span><span class="duration">—:——</span></div>
+              <div class="progress-bar" role="slider" aria-label="Progreso del audio"><div class="progress"></div></div>
+              <div class="controles-principales">
+                <button class="play-pause" aria-label="Reproducir / Pausar"><i class="fa-solid fa-play" style="color:#fff; font-size:13px;"></i></button>
+                <div class="volumen-container">
+                  <span><i class="fa-solid fa-volume-high"></i></span>
+                  <input type="range" class="volumen" min="0" max="1" step="0.05" value="1" aria-label="Volumen">
                 </div>
-                <div class="progress-bar" onclick="seekAudio(event)">
-                    <div class="progress"></div>
-                </div>
-                <div class="controles-principales">
-                    <button class="play-pause" onclick="togglePlay(this)"><i class="fa-solid fa-play" style="color: #ffffff;"></i></button>
-                    <div class="volumen-container">
-                        <span><i class="fa-solid fa-volume-high" style="color: #ffffff;"></i></span>
-                        <input type="range" class="volumen" min="0" max="1" step="0.1" oninput="setVolume(this)">
-                    </div>
-                </div>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-</section>
-    
-    <!-- Sección 8.PRESENTAN SUS PLIEGOS -->
-    <section id="section8" class="seccion seccion--reverse">
-         <audio class="audio-seccion" hidden>
-            <source src="audio/audiopliegos.mp3" type="audio/mpeg">
+      </section>
+
+      <!-- ============================================================
+           SECCIÓN 8: OHL LIMPIEZA
+           ============================================================ -->
+      <section id="section8" class="seccion seccion--reverse" data-category="protestando">
+        <audio class="audio-seccion" data-label="OHL Limpieza" hidden>
+          <source src="audio/audiopliegos.mp3" type="audio/mpeg">
         </audio>
         <div class="contenido">
-            <h2>'Presentan sus pliegos y luego no hay dinero para los convenios' Las reivindicaciones</h2>
-<p>Según las personas trabajadoras, OHL da el servicio desde 2020 pero mantiene congeladas las conversaciones sobre el convenio colectivo. La Coordinadora TPA es mayoritaria en la representación de la plantilla, que a finales de 2021 decretaron la huelga para exigir a la empresa OHL, concesionaria de los servicios de limpieza en el PBA, que avancen las negociaciones por un nuevo convenio colectivo que garanticen mejoras salariales, en un momento de gran preocupación por la pérdida de poder adquisitivo que supuso la inflación. En 2022 se consigue un comité de empresa con 5 personas delegadas lo que posibilitó reuniones de negociación con la autoridad portuaria de cara a la concesión de la nueva contrata. En 2025, tras las negociaciones, entra como nueva empresa Eulen.
-</p>
-
+          <h2>'Presentan sus pliegos y luego no hay dinero para los convenios' Las reivindicaciones</h2>
+          <p>Según las personas trabajadoras, OHL da el servicio desde 2020 pero mantiene congeladas las conversaciones sobre el convenio colectivo. Coordinadora TPA es mayoritaria en la representación de la plantilla, que a finales de 2021 decretaron la huelga para exigir a la empresa OHL, concesionaria de los servicios de limpieza en el PBA, que avancen las negociaciones por un nuevo convenio colectivo que garanticen mejoras salariales, en un momento de gran preocupación por la pérdida de poder adquisitivo que supuso la inflación. En 2022 se consigue un comité de empresa con 5 personas delegadas lo que posibilitó reuniones de negociación con la autoridad portuaria de cara a la concesión de la nueva contrata. En 2025, tras las negociaciones, entra como nueva empresa Eulen.</p>
         </div>
         <div class="media">
-            <img src="img/8. OHL.jpg" alt="Imagen 1">
-            <div class="botones">
-                <a href="https://www.europasur.es/maritimas/limpieza-Autoridad-Portuaria-huelga-noviembre-puerto-Algeciras_0_1630638188.html" class="boton" target="_blank">Prensa</a>
-                <a href="https://www.youtube.com/watch?v=yDDfhTUxSO8" class="boton" target="_blank">Vídeo</a>
-            <div class="boton audio-btn" onclick="toggleControles(this)">Audio</div>
-                <div class="audio-controles">
-                    <div class="tiempo">
-                        <span class="current-time">0:00</span>
-                        <span class="duration">0:31</span>
-                    </div>
-                    <div class="progress-bar" onclick="seekAudio(event)">
-                        <div class="progress"></div>
-                    </div>
-                    <div class="controles-principales">
-                        <button class="play-pause" onclick="togglePlay(this)"><i class="fa-solid fa-play" style="color: #ffffff;"></i></button>
-                        <div class="volumen-container">
-                            <span><i class="fa-solid fa-volume-high" style="color: #ffffff;"></i></span>
-                            <input type="range" class="volumen" min="0" max="1" step="0.1" oninput="setVolume(this)">
-                        </div>
-                    </div>
+          <img src="img/8. OHL.jpg" alt="OHL Limpieza">
+          <div class="botones">
+            <a href="https://www.europasur.es/maritimas/limpieza-Autoridad-Portuaria-huelga-noviembre-puerto-Algeciras_0_1630638188.html" class="boton" target="_blank">Prensa</a>
+            <a href="https://www.youtube.com/watch?v=yDDfhTUxSO8" class="boton" target="_blank">Vídeo</a>
+            <div class="boton audio-btn" role="button" tabindex="0" aria-label="Reproducir audio: OHL Limpieza">Audio</div>
+            <div class="audio-controles" role="region" aria-label="Reproductor de audio">
+              <button class="audio-controles-close" aria-label="Cerrar reproductor"><i class="fa-solid fa-xmark"></i></button>
+              <div class="tiempo"><span class="current-time">0:00</span><span class="duration">—:——</span></div>
+              <div class="progress-bar" role="slider" aria-label="Progreso del audio"><div class="progress"></div></div>
+              <div class="controles-principales">
+                <button class="play-pause" aria-label="Reproducir / Pausar"><i class="fa-solid fa-play" style="color:#fff; font-size:13px;"></i></button>
+                <div class="volumen-container">
+                  <span><i class="fa-solid fa-volume-high"></i></span>
+                  <input type="range" class="volumen" min="0" max="1" step="0.05" value="1" aria-label="Volumen">
+                </div>
               </div>
-              </div>
+            </div>
+          </div>
         </div>
-    </section>
+      </section>
 
-
-
-
-    <!-- Sección 1.QUIEREN CARGÁRSELO TODO -->
-  <!-- Sección 1.QUIEREN CARGÁRSELO TODO -->
-<section id="section1" class="seccion" style="flex-direction: column;">
-    <audio class="audio-seccion" hidden>
-        <source src="audio/incompetencia.mp3" type="audio/mpeg">
-    </audio>
-    <div class="contenido" style="flex: 1 1 100%;">
-        <h2 style="text-align: center;">Incompetencia. Despropósito de las autoridades de puertos del estado</h2>
-<img src="img/ONE Inspiration 1.jpg" alt="Imagen 1" style="width: auto; height: auto; max-width: 100%; border-radius: 10px; margin-bottom: 1.2rem;">        <p style="max-width: 100%; text-align: center;">En 2017, el Gobierno intentó reformar el sistema portuario mediante un Real Decreto que debilitaba la estabilidad laboral y el poder sindical en la estiba, tras una sentencia de la UE. Las personas trabajadoras, lideradas por la Coordinadora TPA, respondieron con huelgas y movilizaciones en junio. Pese a la oposición mediática conservadora lograron un acuerdo que protegió la calidad del empleo y la cualificación del sector. Gracias al acuerdo de este conflicto, en 2020 se dio un paso al frente tanto por parte de la estiba como de los trabajadores y las trabajadoras ya que mientras estaba paralizado el país por el Covid, el puerto no se detuvo. esto fue en 2017 y gracias a este al bueno, gracias al conflicto y al diálogo que hubo con el Estado y demás, en el 2020 dieron un paso al frente, tanto la estiba como todos los trabajadores, porque todo el mundo estaba paralizado a nivel nacional, como bien sabéis y nosotros no paramos de trabajar. Nosotros, los trabajadores aquí del puerto fuimos los primeros conejillos de India en vacunarnos. O sea, que tuvimos prioridad en vacunarnos.</p>
-        <div class="botones">
+      <!-- ============================================================
+           SECCIÓN 1: ESTIBA 2017
+           ============================================================ -->
+      <section id="section1" class="seccion" style="flex-direction: column;" data-category="protestando">
+        <audio class="audio-seccion" data-label="Estiba 2017" hidden>
+          <source src="audio/incompetencia.mp3" type="audio/mpeg">
+        </audio>
+        <div class="contenido" style="flex: 1 1 100%;">
+          <h2 style="text-align: center;">Incompetencia. Despropósito de las autoridades de puertos del estado</h2>
+          <img src="img/ONE Inspiration 1.jpg" alt="Estiba 2017" style="width: auto; height: auto; max-width: 100%; border-radius: 10px; margin-bottom: 1.2rem;">
+          <p style="max-width: 100%; text-align: center;">En 2017, el Gobierno intentó reformar el sistema portuario mediante un Real Decreto que debilitaba la estabilidad laboral y el poder sindical en la estiba, tras una sentencia de la UE. Las personas trabajadoras, lideradas por Coordinadora TPA, respondieron con huelgas y movilizaciones en junio. Pese a la oposición mediática conservadora lograron un acuerdo que protegió la calidad del empleo y la cualificación del sector. Gracias al acuerdo de este conflicto, en 2020 se dio un paso al frente tanto por parte de la estiba como de los trabajadores y las trabajadoras ya que mientras estaba paralizado el país por el Covid, el puerto no se detuvo. Esto fue en 2017 y gracias a este al bueno, gracias al conflicto y al diálogo que hubo con el Estado y demás, en el 2020 dieron un paso al frente, tanto la estiba como todos los trabajadores, porque todo el mundo estaba paralizado a nivel nacional, como bien sabéis y nosotros no paramos de trabajar. Nosotros, los trabajadores aquí del puerto fuimos los primeros conejillos de India en vacunarnos. O sea, que tuvimos prioridad en vacunarnos.</p>
+          <div class="botones">
             <a href="https://www.elmundo.es/economia/2017/06/09/593a8b18468aeb6f668b4611.html" class="boton" target="_blank">Prensa</a>
             <a href="https://www.diariodecadiz.es/noticias-provincia-cadiz/unidad-estibadores-puerto-Algeciras-minimos_0_1142586312.html" class="boton" target="_blank">Prensa</a>
             <a href="https://www.larazon.es/economia/la-huelga-de-estibadores-deja-herido-de-muerte-al-puerto-de-algeciras-DB15414465/" class="boton" target="_blank">Prensa</a>
-            <div class="boton audio-btn" onclick="toggleControles(this)">Audio</div>
-            <div class="audio-controles">
-                <div class="tiempo">
-                    <span class="current-time">0:00</span>
-                    <span class="duration">0:28</span>
+            <div class="boton audio-btn" role="button" tabindex="0" aria-label="Reproducir audio: Estiba 2017">Audio</div>
+            <div class="audio-controles" role="region" aria-label="Reproductor de audio">
+              <button class="audio-controles-close" aria-label="Cerrar reproductor"><i class="fa-solid fa-xmark"></i></button>
+              <div class="tiempo"><span class="current-time">0:00</span><span class="duration">—:——</span></div>
+              <div class="progress-bar" role="slider" aria-label="Progreso del audio"><div class="progress"></div></div>
+              <div class="controles-principales">
+                <button class="play-pause" aria-label="Reproducir / Pausar"><i class="fa-solid fa-play" style="color:#fff; font-size:13px;"></i></button>
+                <div class="volumen-container">
+                  <span><i class="fa-solid fa-volume-high"></i></span>
+                  <input type="range" class="volumen" min="0" max="1" step="0.05" value="1" aria-label="Volumen">
                 </div>
-                <div class="progress-bar" onclick="seekAudio(event)">
-                    <div class="progress"></div>
-                </div>
-                <div class="controles-principales">
-                    <button class="play-pause" onclick="togglePlay(this)"><i class="fa-solid fa-play" style="color: #ffffff;"></i></button>
-                    <div class="volumen-container">
-                        <span><i class="fa-solid fa-volume-high" style="color: #ffffff;"></i></span>
-                        <input type="range" class="volumen" min="0" max="1" step="0.1" oninput="setVolume(this)">
-                    </div>
-                </div>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-</section>
+      </section>
 
-  
-</div>
+    </main>
 
-    <script>
-function toggleControles(btn) {
-  const controles = btn.nextElementSibling;
-  document.querySelectorAll('.audio-controles.visible').forEach(c => {
-    if (c !== controles) c.classList.remove('visible');
-  });
-  controles.classList.toggle('visible');
-
-  const audio = btn.closest('.seccion').querySelector('.audio-seccion');
-  if (audio && !audio.dataset.durationSet) {
-    audio.addEventListener('loadedmetadata', () => {
-      const durationElement = controles.querySelector('.duration');
-      if (durationElement) {
-        durationElement.textContent = formatTime(audio.duration);
-      }
-    });
-    audio.dataset.durationSet = true;
-  }
-}
-
-function togglePlay(btn) {
-  const controles = btn.closest('.audio-controles');
-  const audio = btn.closest('.seccion').querySelector('.audio-seccion');
-
-  if (!audio) { console.error('No se encontró el elemento de audio.'); return; }
-
-  if (audio.paused) {
-    audio.play().then(() => {
-      btn.innerHTML = '<i class="fa-solid fa-pause" style="color: #ffffff;"></i>';
-      startProgressUpdate(audio, controles);
-    }).catch(error => { console.error('Error al reproducir el audio:', error); });
-  } else {
-    audio.pause();
-    btn.innerHTML = '<i class="fa-solid fa-play" style="color: #ffffff;"></i>';
-  }
-}
-
-function setVolume(slider) {
-  const audio = slider.closest('.seccion').querySelector('.audio-seccion');
-  if (!audio) { console.error('No se encontró el elemento de audio.'); return; }
-  audio.volume = slider.value;
-}
-
-function seekAudio(e) {
-  const bar = e.currentTarget;
-  const rect = bar.getBoundingClientRect();
-  const porcentaje = (e.clientX - rect.left) / rect.width;
-  const audio = bar.closest('.seccion').querySelector('.audio-seccion');
-  if (!audio) { console.error('No se encontró el elemento de audio.'); return; }
-  audio.currentTime = audio.duration * porcentaje;
-}
-
-function formatTime(seconds) {
-  const min = Math.floor(seconds / 60);
-  const sec = Math.floor(seconds % 60);
-  return `${min}:${sec.toString().padStart(2, '0')}`;
-}
-
-function startProgressUpdate(audio, controles) {
-  const update = () => {
-    if (audio.paused) return;
-    const progress = (audio.currentTime / audio.duration) * 100;
-    const progressBar = controles.querySelector('.progress');
-    const currentTimeElement = controles.querySelector('.current-time');
-    if (progressBar) progressBar.style.width = `${progress}%`;
-    if (currentTimeElement) currentTimeElement.textContent = formatTime(audio.currentTime);
-    requestAnimationFrame(update);
-  };
-  update();
-}
-
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('.audio-controles') && !e.target.closest('.audio-btn')) {
-    document.querySelectorAll('.audio-controles.visible').forEach(c => c.classList.remove('visible'));
-  }
-});
-
-const backToTopButton = document.querySelector('.back-to-top');
-if (backToTopButton) {
-  backToTopButton.addEventListener('click', (e) => {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  const mapPoints = document.querySelectorAll('.map-point');
-  const sections  = document.querySelectorAll('.seccion');
-
-  // --- Función de filtrado de puntos del mapa ---
-  function filterMapPoints(category) {
-    mapPoints.forEach(point => {
-      if (category === 'all' || point.dataset.category === category) {
-        point.classList.add('active');
-      } else {
-        point.classList.remove('active');
-      }
-    });
-    // Marcar visualmente el botón activo del menú lateral
-    document.querySelectorAll('.category-btn.toggle-sub[data-filter-category]').forEach(b => {
-      b.classList.toggle('filter-active', b.dataset.filterCategory === category);
-    });
-  }
-
-  // Mostrar todos los puntos del mapa al cargar
-  filterMapPoints('all');
-
-  // Filtrado desde los botones de categoría del menú lateral
-  document.querySelectorAll('.category-btn.toggle-sub[data-filter-category]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const cat = btn.dataset.filterCategory;
-      // Si ya está activo, resetear a "todas"
-      if (btn.classList.contains('filter-active')) {
-        filterMapPoints('all');
-      } else {
-        filterMapPoints(cat);
-      }
-    });
-  });
-
-  // El enlace "Mapa" resetea el filtro y muestra todos los puntos
-  const mapaLink = document.querySelector('a[href="#mapa-interactivo"]');
-  if (mapaLink) {
-    mapaLink.addEventListener('click', () => filterMapPoints('all'));
-  }
-
-  // Navegación a secciones desde los puntos
-  mapPoints.forEach(point => {
-    point.addEventListener('click', (event) => {
-      event.preventDefault();
-      mapPoints.forEach(pt => pt.classList.remove('selected'));
-      point.classList.add('selected');
-      const sectionId = point.dataset.section;
-      const targetSection = document.getElementById(sectionId);
-      if (targetSection) {
-        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    });
-  });
-
-  // IntersectionObserver para actualizar la selección al hacer scroll
-  const sectionObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        mapPoints.forEach(pt => pt.classList.remove('selected'));
-        const correspondingPoint = document.querySelector(`.map-point[data-section="${entry.target.id}"]`);
-        if (correspondingPoint) correspondingPoint.classList.add('selected');
-      }
-    });
-  }, { root: null, threshold: 0.5 });
-
-  sections.forEach(section => sectionObserver.observe(section));
-
-  // Menú lateral
-  const menuToggle = document.getElementById("menu-toggle");
-  const menuLateral = document.querySelector(".menu-lateral");
-  if (menuToggle && menuLateral) {
-    menuToggle.addEventListener("click", () => menuLateral.classList.toggle("oculto"));
-  }
-
-  // Submenús del lateral
-  document.querySelectorAll('.toggle-sub').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const sub = btn.nextElementSibling;
-      if (sub) {
-        sub.classList.toggle('open');
-        sub.style.display = sub.classList.contains('open') ? 'block' : 'none';
-      }
-    });
-  });
-
-  document.querySelectorAll('.subcategorias button').forEach(subBtn => {
-    subBtn.addEventListener('click', () => {
-      const targetId = subBtn.getAttribute('data-section');
-      const target = document.getElementById(targetId);
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  });
-});
-    </script>
-
+    <!-- FOOTER -->
     <footer class="footer">
-        <div class="footer-contenido">
-            <p>
-                SPATIALPOLITICS La política del espacio de la fuerza laboral en la industria logística. Financiado por el Plan Nacional de I+D+i. Generación de Conocimiento. Ministerio de Ciencia e Innovación. Ref:
-                <a href="https://www.aei.gob.es/ayudas-concedidas/buscador-ayudas-concedidas?year=All&convocatory=All&code=PID2021-122890OB-I00" target="_blank" style="color: #007bff; text-decoration: underline #007bff;">
-                    PID2021-122890OB-I00
-                </a>
+      <div class="footer-contenido">
+
+        <div class="footer-grid">
+
+          <!-- Columna 1: Proyecto -->
+          <div class="footer-col">
+            <p class="footer-label">Proyecto</p>
+            <p class="footer-project-name">SPATIALPOLITICS</p>
+            <p class="footer-text">La política del espacio de la fuerza laboral en la industria logística.</p>
+            <p class="footer-text">Financiado por el Plan Nacional de I+D+i · Generación de Conocimiento · Ministerio de Ciencia e Innovación.</p>
+            <p class="footer-ref">
+              Ref: <a href="https://www.aei.gob.es/ayudas-concedidas/buscador-ayudas-concedidas?year=All&convocatory=All&code=PID2021-122890OB-I00" target="_blank" class="footer-link">PID2021-122890OB-I00</a>
             </p>
-            <p>©2025 Desarrollada por el grupo de investigación SEJ-657 <a href="https://sej657.uca.es/" target="_blank" style="color: #007bff; text-decoration: underline #007bff;">Transformaciones y conflictos en las Sociedades Contemporáneas</a> bajo los estándares del Software libre.</p>
-            <a href="#top" class="back-to-top">Volver arriba</a>
+          </div>
+
+          <!-- Divisor vertical -->
+          <div class="footer-divider" aria-hidden="true"></div>
+
+          <!-- Columna 2: Autoría -->
+          <div class="footer-col">
+            <p class="footer-label">Desarrollada por</p>
+            <p class="footer-text">
+              Grupo de investigación SEJ-657
+            </p>
+            <a href="https://sej657.uca.es/" target="_blank" class="footer-link footer-group-link">
+              Transformaciones y conflictos en las Sociedades Contemporáneas
+              <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.7em; margin-left:4px;"></i>
+            </a>
+            <p class="footer-copy">©&thinsp;2025 · Software libre</p>
+          </div>
+
         </div>
+
+        <!-- Línea separadora -->
+        <div class="footer-sep" aria-hidden="true"></div>
+
+        <!-- Volver arriba centrado -->
+        <div class="footer-bottom">
+          <a href="#top" class="back-to-top">
+            <i class="fa-solid fa-chevron-up"></i> Volver arriba
+          </a>
+        </div>
+
+      </div>
     </footer>
+
+  </div>
+
+  <!-- ================================================================
+       SCRIPTS
+       ================================================================ -->
+  <script>
+    /* ----------------------------------------------------------------
+       BARRA DE PROGRESO DE LECTURA
+    ---------------------------------------------------------------- */
+    const readingProgress = document.getElementById('reading-progress');
+    window.addEventListener('scroll', () => {
+      const scrollTop  = window.scrollY;
+      const docHeight  = document.documentElement.scrollHeight - window.innerHeight;
+      const pct        = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      readingProgress.style.width = pct + '%';
+    }, { passive: true });
+
+    /* ================================================================
+       SISTEMA DE AUDIO — versión corregida e integrada
+       ================================================================
+
+       Diseño:
+         • Cada sección puede tener 1 ó más elementos <audio.audio-seccion>.
+         • Cada <audio> corresponde en orden al par (audio-btn / audio-controles)
+           que le sigue dentro del mismo .botones.
+         • Se indexa por posición para resolver la sección con dos audios (sec. 7).
+         • Solo puede reproducirse un audio a la vez en toda la página.
+    ================================================================ */
+
+    /** Devuelve el índice de un elemento dentro de un NodeList/Array */
+    function indexOf(list, el) {
+      return Array.prototype.indexOf.call(list, el);
+    }
+
+    /**
+     * Dado un elemento perteneciente a una sección,
+     * devuelve el audio correspondiente según su índice entre
+     * los .audio-btn o los .audio-controles del mismo .botones.
+     */
+    function getAudioFor(el) {
+      const section   = el.closest('.seccion');
+      if (!section) return null;
+      const allAudios = section.querySelectorAll('.audio-seccion');
+      if (!allAudios.length) return null;
+
+      let idx = 0;
+      if (el.classList.contains('audio-btn')) {
+        const btns = section.querySelectorAll('.audio-btn');
+        idx = indexOf(btns, el);
+      } else {
+        // elemento dentro de .audio-controles
+        const controles = el.closest('.audio-controles');
+        const allControles = section.querySelectorAll('.audio-controles');
+        idx = indexOf(allControles, controles);
+      }
+
+      return allAudios[Math.min(idx, allAudios.length - 1)] || allAudios[0];
+    }
+
+    /**
+     * Dado un audio, devuelve su .audio-controles hermano
+     */
+    function getControlesFor(audio) {
+      const section = audio.closest('.seccion');
+      if (!section) return null;
+      const allAudios    = section.querySelectorAll('.audio-seccion');
+      const allControles = section.querySelectorAll('.audio-controles');
+      const idx = indexOf(allAudios, audio);
+      return allControles[Math.min(idx, allControles.length - 1)] || null;
+    }
+
+    /**
+     * Dado un audio, devuelve su .audio-btn hermano
+     */
+    function getBtnFor(audio) {
+      const section = audio.closest('.seccion');
+      if (!section) return null;
+      const allAudios = section.querySelectorAll('.audio-seccion');
+      const allBtns   = section.querySelectorAll('.audio-btn');
+      const idx = indexOf(allAudios, audio);
+      return allBtns[Math.min(idx, allBtns.length - 1)] || null;
+    }
+
+    /** Formatea segundos → "m:ss" */
+    function formatTime(s) {
+      if (!isFinite(s) || isNaN(s)) return '0:00';
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60);
+      return `${m}:${sec.toString().padStart(2, '0')}`;
+    }
+
+    /** Detiene y resetea todos los audios excepto el indicado */
+    function stopAllExcept(exceptAudio) {
+      document.querySelectorAll('.audio-seccion').forEach(audio => {
+        if (audio === exceptAudio) return;
+        if (!audio.paused) {
+          audio.pause();
+          resetAudioUI(audio);
+        }
+      });
+    }
+
+    /** Resetea la UI de un audio al estado inicial */
+    function resetAudioUI(audio) {
+      const controles = getControlesFor(audio);
+      const btn       = getBtnFor(audio);
+
+      if (controles) {
+        const playBtn    = controles.querySelector('.play-pause');
+        const progressEl = controles.querySelector('.progress');
+        const timeEl     = controles.querySelector('.current-time');
+        if (playBtn)    playBtn.innerHTML = '<i class="fa-solid fa-play" style="color:#fff; font-size:13px;"></i>';
+        if (progressEl) progressEl.style.width = '0%';
+        if (timeEl)     timeEl.textContent = '0:00';
+      }
+      if (btn) btn.classList.remove('is-playing');
+    }
+
+    /** Sincroniza la barra de progreso mientras el audio reproduce */
+    function startProgressLoop(audio, controles) {
+      const progressEl = controles.querySelector('.progress');
+      const timeEl     = controles.querySelector('.current-time');
+
+      function tick() {
+        if (audio.paused || audio.ended) return;
+        if (audio.duration > 0) {
+          const pct = (audio.currentTime / audio.duration) * 100;
+          if (progressEl) progressEl.style.width = `${pct}%`;
+          if (timeEl)     timeEl.textContent = formatTime(audio.currentTime);
+        }
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    /** Carga la duración en el elemento .duration del reproductor */
+    function loadDuration(audio, controles) {
+      const durationEl = controles.querySelector('.duration');
+      if (!durationEl) return;
+
+      const set = () => {
+        if (isFinite(audio.duration)) durationEl.textContent = formatTime(audio.duration);
+      };
+      if (audio.readyState >= 1) {
+        set();
+      } else {
+        audio.addEventListener('loadedmetadata', set, { once: true });
+        audio.load(); // fuerza la carga del metadato si aún no se ha iniciado
+      }
+    }
+
+    /* ----------------------------------------------------------------
+       HANDLERS (llamados desde los event listeners, ya NO inline)
+    ---------------------------------------------------------------- */
+
+    /** Abre / cierra el reproductor al pulsar el botón "Audio" */
+    function handleAudioBtnClick(btn) {
+      const controles = btn.nextElementSibling; // siempre el hermano inmediato
+      if (!controles || !controles.classList.contains('audio-controles')) return;
+
+      const wasVisible = controles.classList.contains('visible');
+
+      // Cierra todos los reproductores abiertos
+      document.querySelectorAll('.audio-controles.visible').forEach(c => c.classList.remove('visible'));
+
+      if (!wasVisible) {
+        controles.classList.add('visible');
+        const audio = getAudioFor(btn);
+        if (audio) {
+          loadDuration(audio, controles);
+          // Sincroniza si ya estaba reproduciendo
+          if (!audio.paused) {
+            const pp = controles.querySelector('.play-pause');
+            if (pp) pp.innerHTML = '<i class="fa-solid fa-pause" style="color:#fff; font-size:13px;"></i>';
+            startProgressLoop(audio, controles);
+          }
+        }
+      }
+    }
+
+    /** Play / Pause */
+    function handlePlayPause(playBtn) {
+      const controles = playBtn.closest('.audio-controles');
+      const audio     = getAudioFor(playBtn);
+      if (!audio || !controles) return;
+
+      if (audio.paused) {
+        stopAllExcept(audio);
+        controles.classList.add('loading');
+
+        audio.play()
+          .then(() => {
+            controles.classList.remove('loading');
+            playBtn.innerHTML = '<i class="fa-solid fa-pause" style="color:#fff; font-size:13px;"></i>';
+            const audioBtn = getBtnFor(audio);
+            if (audioBtn) audioBtn.classList.add('is-playing');
+            startProgressLoop(audio, controles);
+          })
+          .catch(err => {
+            controles.classList.remove('loading');
+            console.warn('Error al reproducir:', err);
+          });
+      } else {
+        audio.pause();
+        playBtn.innerHTML = '<i class="fa-solid fa-play" style="color:#fff; font-size:13px;"></i>';
+        const audioBtn = getBtnFor(audio);
+        if (audioBtn) audioBtn.classList.remove('is-playing');
+      }
+    }
+
+    /** Seek al hacer clic en la barra de progreso */
+    function handleSeek(e) {
+      const bar   = e.currentTarget;
+      const rect  = bar.getBoundingClientRect();
+      const pct   = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      const audio = getAudioFor(bar);
+      if (audio && isFinite(audio.duration)) {
+        audio.currentTime = audio.duration * pct;
+        // Actualización visual inmediata
+        const progressEl = bar.querySelector('.progress');
+        if (progressEl) progressEl.style.width = `${pct * 100}%`;
+        const timeEl = bar.closest('.audio-controles').querySelector('.current-time');
+        if (timeEl) timeEl.textContent = formatTime(audio.currentTime);
+      }
+    }
+
+    /** Cambio de volumen */
+    function handleVolume(slider) {
+      const audio = getAudioFor(slider);
+      if (audio) audio.volume = parseFloat(slider.value);
+      // Icono de volumen reactivo
+      const icon = slider.previousElementSibling;
+      if (icon) {
+        const v = parseFloat(slider.value);
+        icon.innerHTML = v === 0
+          ? '<i class="fa-solid fa-volume-xmark"></i>'
+          : v < 0.5
+          ? '<i class="fa-solid fa-volume-low"></i>'
+          : '<i class="fa-solid fa-volume-high"></i>';
+      }
+    }
+
+    /** Cierra el reproductor al pulsar la X */
+    function handleClose(closeBtn) {
+      const controles = closeBtn.closest('.audio-controles');
+      if (controles) controles.classList.remove('visible');
+    }
+
+    /* ----------------------------------------------------------------
+       INICIALIZACIÓN — adjunta todos los listeners tras cargarse el DOM
+    ---------------------------------------------------------------- */
+    document.addEventListener('DOMContentLoaded', () => {
+
+      /* --- Audio-btn: abrir / cerrar reproductor --- */
+      document.querySelectorAll('.audio-btn').forEach(btn => {
+        btn.addEventListener('click', () => handleAudioBtnClick(btn));
+        // Soporte teclado
+        btn.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleAudioBtnClick(btn);
+          }
+        });
+      });
+
+      /* --- Play / Pause --- */
+      document.querySelectorAll('.play-pause').forEach(btn => {
+        btn.addEventListener('click', () => handlePlayPause(btn));
+      });
+
+      /* --- Barra de progreso (seek) --- */
+      document.querySelectorAll('.progress-bar').forEach(bar => {
+        bar.addEventListener('click', handleSeek);
+        // Drag sobre la barra
+        let dragging = false;
+        bar.addEventListener('mousedown', () => { dragging = true; });
+        document.addEventListener('mousemove', e => {
+          if (!dragging) return;
+          handleSeek({ currentTarget: bar, clientX: e.clientX });
+        });
+        document.addEventListener('mouseup', () => { dragging = false; });
+      });
+
+      /* --- Volumen --- */
+      document.querySelectorAll('.volumen').forEach(slider => {
+        slider.addEventListener('input', () => handleVolume(slider));
+      });
+
+      /* --- Botón cerrar (X) del reproductor --- */
+      document.querySelectorAll('.audio-controles-close').forEach(btn => {
+        btn.addEventListener('click', () => handleClose(btn));
+      });
+
+      /* --- Fin de audio: resetear UI --- */
+      document.querySelectorAll('.audio-seccion').forEach(audio => {
+        audio.addEventListener('ended', () => {
+          audio.currentTime = 0;
+          resetAudioUI(audio);
+          // Resetear la barra también en el reproductor
+          const controles = getControlesFor(audio);
+          if (controles) {
+            const progressEl = controles.querySelector('.progress');
+            if (progressEl) progressEl.style.width = '0%';
+            const timeEl = controles.querySelector('.current-time');
+            if (timeEl) timeEl.textContent = '0:00';
+          }
+        });
+      });
+
+      /* --- Cerrar reproductores al hacer clic fuera --- */
+      document.addEventListener('click', e => {
+        if (!e.target.closest('.audio-controles') && !e.target.closest('.audio-btn')) {
+          document.querySelectorAll('.audio-controles.visible').forEach(c => c.classList.remove('visible'));
+        }
+      });
+
+      /* --- Pausar audio al salir de la sección (IntersectionObserver) --- */
+      const sectionObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) {
+            entry.target.querySelectorAll('.audio-seccion').forEach(audio => {
+              if (!audio.paused) {
+                audio.pause();
+                resetAudioUI(audio);
+              }
+            });
+          }
+        });
+      }, { threshold: 0 });
+
+      document.querySelectorAll('.seccion').forEach(s => sectionObserver.observe(s));
+
+      /* ================================================================
+         MENÚ LATERAL + MAPA (sin cambios respecto al original)
+      ================================================================ */
+      const menuToggle  = document.getElementById('menu-toggle');
+      const menuLateral = document.getElementById('menu-lateral');
+      const menuOverlay = document.getElementById('menu-overlay');
+      const mapPoints   = document.querySelectorAll('.map-point');
+      const sections    = document.querySelectorAll('.seccion');
+
+      const isMobile = () => window.innerWidth <= 768;
+
+      function openMenu() {
+        if (isMobile()) {
+          menuLateral.classList.remove('collapsed');
+          menuLateral.classList.add('open');
+          menuOverlay.classList.add('visible');
+        } else {
+          menuLateral.classList.remove('collapsed');
+          document.body.classList.remove('menu-collapsed');
+        }
+      }
+
+      function closeMenu() {
+        if (isMobile()) {
+          menuLateral.classList.remove('open');
+          menuOverlay.classList.remove('visible');
+        } else {
+          menuLateral.classList.add('collapsed');
+          document.body.classList.add('menu-collapsed');
+        }
+      }
+
+      function isMenuOpen() {
+        return isMobile()
+          ? menuLateral.classList.contains('open')
+          : !menuLateral.classList.contains('collapsed');
+      }
+
+      if (menuToggle)  menuToggle.addEventListener('click', () => isMenuOpen() ? closeMenu() : openMenu());
+      if (menuOverlay) menuOverlay.addEventListener('click', closeMenu);
+
+      window.addEventListener('resize', () => {
+        if (!isMobile()) {
+          menuOverlay.classList.remove('visible');
+          menuLateral.classList.remove('open');
+        }
+      });
+
+      /* --- Filtrado de puntos del mapa --- */
+      function filterMapPoints(category) {
+        mapPoints.forEach(p => {
+          if (category === 'all' || p.dataset.category === category) {
+            p.classList.add('active');
+          } else {
+            p.classList.remove('active');
+          }
+        });
+        document.querySelectorAll('.category-btn.toggle-sub[data-filter-category]').forEach(b => {
+          b.classList.toggle('filter-active', b.dataset.filterCategory === category);
+        });
+      }
+
+      filterMapPoints('all');
+
+      document.querySelectorAll('.category-btn.toggle-sub[data-filter-category]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const cat = btn.dataset.filterCategory;
+          filterMapPoints(btn.classList.contains('filter-active') ? 'all' : cat);
+        });
+      });
+
+      const mapaLink = document.querySelector('a[href="#mapa-interactivo"]');
+      if (mapaLink) mapaLink.addEventListener('click', () => { filterMapPoints('all'); closeMenu(); });
+
+      /* --- Navegación desde puntos del mapa --- */
+      mapPoints.forEach(point => {
+        point.addEventListener('click', e => {
+          e.preventDefault();
+          mapPoints.forEach(pt => pt.classList.remove('selected'));
+          point.classList.add('selected');
+          const target = document.getElementById(point.dataset.section);
+          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      /* --- IntersectionObserver para sincronizar mapa --- */
+      const mapObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            mapPoints.forEach(pt => pt.classList.remove('selected'));
+            const pt = document.querySelector(`.map-point[data-section="${entry.target.id}"]`);
+            if (pt) pt.classList.add('selected');
+          }
+        });
+      }, { threshold: 0.5 });
+
+      sections.forEach(s => mapObserver.observe(s));
+
+      /* --- Reveal on scroll --- */
+      const revealObserver = new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry, i) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => entry.target.classList.add('revealed'), i * 60);
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.08 });
+
+      sections.forEach(s => revealObserver.observe(s));
+
+      /* --- Submenús laterales --- */
+      document.querySelectorAll('.toggle-sub').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const sub = btn.nextElementSibling;
+          if (sub) {
+            const isOpen = sub.classList.toggle('open');
+            sub.style.display = isOpen ? 'block' : 'none';
+            btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+          }
+        });
+      });
+
+      document.querySelectorAll('.subcategorias button').forEach(subBtn => {
+        subBtn.addEventListener('click', () => {
+          const target = document.getElementById(subBtn.dataset.section);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            if (isMobile()) closeMenu();
+          }
+        });
+      });
+
+      /* --- Volver arriba --- */
+      const backToTop = document.querySelector('.back-to-top');
+      if (backToTop) {
+        backToTop.addEventListener('click', e => {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+    }); // fin DOMContentLoaded
+  </script>
+
 </body>
 </html>
