@@ -1,3 +1,275 @@
+/* =====================================================================
+   FUENTES PERSONALIZADAS
+   ===================================================================== */
+@font-face {
+    font-family: 'Revista';
+    src: url('fonts/REVISTA.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Crayon';
+    src: url('fonts/DK Cool Crayon.ttf') format('truetype');
+}
+
+/* =====================================================================
+   VARIABLES DE CATEGORÍAS (paleta coherente)
+   ===================================================================== */
+:root {
+    --cat-definiendo-color: #534AB7;
+    --cat-definiendo-light: #EEEDFE;
+    --cat-frenando-color:   #0F6E56;
+    --cat-frenando-light:   #E1F5EE;
+    --cat-lucha-color:      #993C1D;
+    --cat-lucha-light:      #FAECE7;
+    --cat-oposicion-color:  #993556;
+    --cat-oposicion-light:  #FBEAF0;
+    --cat-protestando-color:#854F0B;
+    --cat-protestando-light:#FAEEDA;
+}
+
+/* =====================================================================
+   RESET / BASE
+   ===================================================================== */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: #F5F4F4;
+    margin-left: 220px;
+    transition: margin-left 0.3s ease;
+    padding: 0 20px;
+}
+
+body.menu-collapsed {
+    margin-left: 0;
+}
+
+/* =====================================================================
+   BARRA DE PROGRESO DE LECTURA
+   ===================================================================== */
+#reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background: #E24B4A;
+    z-index: 2000;
+    transition: width 0.1s linear;
+    border-radius: 0 2px 2px 0;
+}
+
+/* =====================================================================
+   MENÚ LATERAL — fondo oscuro profesional
+   ===================================================================== */
+.menu-lateral {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    background-color: #1a1a1a;
+    padding: 1rem;
+    padding-top: 3.5rem;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.35);
+    overflow-y: auto;
+    z-index: 999;
+    transition: transform 0.3s ease;
+}
+
+.menu-lateral.collapsed {
+    transform: translateX(-100%);
+}
+
+.menu-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 998;
+}
+
+.menu-overlay.visible {
+    display: block;
+}
+
+/* =====================================================================
+   BOTÓN HAMBURGUESA
+   ===================================================================== */
+.menu-toggle {
+    display: flex;
+    position: fixed;
+    top: 12px;
+    left: 180px;
+    z-index: 1001;
+    background: #E24B4A;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    transition: left 0.3s ease, background 0.2s ease;
+}
+
+.menu-toggle:hover {
+    background: #A32D2D;
+}
+
+body.menu-collapsed .menu-toggle {
+    left: 8px;
+}
+
+/* =====================================================================
+   CATEGORÍAS Y SUBMENÚS — fondo oscuro
+   ===================================================================== */
+.categoria {
+    margin-bottom: 0.75rem;
+}
+
+/* Etiqueta de color del punto al lado del botón de categoría */
+.category-btn {
+    border: none;
+    border-radius: 25px;
+    background: #2a2a2a;
+    color: #d0d0d0;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    margin: 0.4rem 0;
+    font-family: 'Crayon', cursive;
+    font-size: 16px;
+    padding: 10px 12px;
+    width: 100%;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.category-btn.active,
+.category-btn.filter-active {
+    background: #333;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Punto de color junto al nombre de categoría */
+.cat-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: inline-block;
+}
+
+/* Chevron animado */
+.chevron {
+    margin-left: auto;
+    display: inline-block;
+    transition: transform 0.25s ease;
+    font-size: 11px;
+    color: #888;
+}
+
+.toggle-sub[aria-expanded="true"] .chevron {
+    transform: rotate(90deg);
+}
+
+.toggle-sub {
+    display: flex;
+    width: 100%;
+    background: #2a2a2a;
+    color: #d0d0d0;
+    padding: 0.55rem 0.9rem;
+    text-align: left;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    font-family: 'Crayon', cursive;
+    font-size: 14px;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.toggle-sub:hover {
+    background: #3a3a3a;
+    color: #fff;
+}
+
+
+
+.mapa-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    background: #E24B4A;
+    color: #fff;
+    padding: 0.55rem 1rem;
+    text-align: left;
+    border-radius: 8px;
+    font-family: 'Crayon', cursive;
+    font-size: 16px;
+    text-decoration: none;
+    margin-bottom: 1rem;
+    transition: background 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.mapa-btn:hover {
+    background: #A32D2D;
+}
+
+.subcategorias {
+    list-style: none;
+    padding-left: 0.75rem;
+    display: none;
+    margin-top: 0.4rem;
+}
+
+.subcategorias.open {
+    display: block;
+}
+
+.subcategorias li button {
+    background: #252525;
+    border: none;
+    width: 100%;
+    text-align: left;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 0.3rem;
+    font-family: 'Crayon', cursive;
+    font-size: 13px;
+    line-height: 1.3;
+    color: #b0b0b0;
+    transition: background 0.2s ease, color 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.subcategorias li button:hover {
+    background: #333;
+    color: #fff;
+}
+
+
+
+/* =====================================================================
+   HEADER
+   ===================================================================== */
 .header {
     background: #F5F4F4;
     padding: 2rem;
@@ -7,278 +279,227 @@
 .header-contenido {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 2rem;
-    padding-bottom: 3rem;
+    padding: 0 2rem 3rem;
+}
+
+/* Kicker encima del título */
+.header-kicker {
+    text-align: center;
+    font-family: 'Crayon', cursive;
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #E24B4A;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.header-kicker::before,
+.header-kicker::after {
+    content: '';
+    display: inline-block;
+    width: 40px;
+    height: 1px;
+    background: #E24B4A;
+    opacity: 0.5;
 }
 
 .titular {
     text-align: center;
-
 }
 
 .titular h1 {
-    font-family: 'Caveat Brush', cursive;
-    color: #fff;
+    font-family: 'Revista', sans-serif;
+    color: black;
     font-size: 4rem;
-    margin: 0;
     line-height: 1;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
 .titular h2 {
-    font-family: 'Revista', sans-serif;
-    color: #ecf0f1;
+    font-family: 'Crayon', cursive;
+    color: black;
     font-size: 3.5rem;
-    margin: 0.8rem 0 0;
+    margin-top: 3rem;
     font-weight: 300;
     letter-spacing: 0.8px;
     line-height: 1.3;
 }
 
-.play-pause{
-    background: none;
+
+
+/* =====================================================================
+   SECCIONES — borde izquierdo de color + reveal on scroll
+   ===================================================================== */
+.seccion {
+    display: flex;
+    padding: 40px 0;
+    max-width: 1200px;
+    margin: 0 auto 5rem;
+    background-color: #F5F4F4;
+    font-family: 'Crayon', cursive;
+    border-radius: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.5s ease;
+    background-image: url("img/fondoDiv1.png");
+    background-size: cover;
+
+    /* Reveal on scroll — estado inicial */
+    opacity: 0;
+    transform: translateY(32px);
+}
+
+/* Estado visible tras IntersectionObserver */
+.seccion.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.seccion:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* El mapa no tiene reveal animado */
+#mapa-interactivo {
+    opacity: 1 !important;
+    transform: none !important;
+}
+
+/* Colores de borde por categoría */
+.seccion[data-category="definiendo"]  { border-left-color: var(--cat-definiendo-color);  }
+.seccion[data-category="frenando"]    { border-left-color: var(--cat-frenando-color);    }
+.seccion[data-category="lucha"]       { border-left-color: var(--cat-lucha-color);       }
+.seccion[data-category="oposicion"]   { border-left-color: var(--cat-oposicion-color);   }
+.seccion[data-category="protestando"] { border-left-color: var(--cat-protestando-color); }
+.seccion[data-category="intro"]       { border-left-color: #888; }
+
+.seccion--reverse {
+    flex-direction: row-reverse;
+}
+
+.contenido {
+    flex: 1 1 50%;
+    display: flex;
+    flex-direction: column;
+    background-size: cover;
+    padding: 0 3rem;
+}
+
+.media {
+    flex: 1 1 50%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.media img {
+    border-radius: 10px;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    margin-bottom: 30px;
+    object-fit: cover;
+}
+
+h2 {
+    color: #000;
+    font-size: 2.2em;
+    margin-bottom: 0.2rem;
+    line-height: 1.3;
+}
+
+p {
+    color: #000;
+    line-height: 1.8;
+    font-size: 1.1em;
+    max-width: 600px;
+    margin-bottom: 10px;
+}
+
+.section-target {
+    scroll-margin-top: 120px;
+}
+
+/* =====================================================================
+   BOTONES
+   ===================================================================== */
+.botones {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+}
+
+.boton {
+    display: inline-block;
+    width: 120px;
+    height: 120px;
+    background-image: url('img/colorpop2.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
     border: none;
     cursor: pointer;
-    outline: none;outline: none;
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 120px;
+    border-radius: 10px;
+    transition: transform 0.2s;
+    font-family: "Crayon", cursive;
 }
 
-@media (max-width: 768px) {
-    .header {
-        padding: 1.5rem 0;
-    }
-    
-    .titular h1 {
-        font-size: 2rem;
-    }
-    
-    .titular h2 {
-        font-size: 1.1rem;
-        margin-top: 0.5rem;
-    }
-    
-    .header-contenido {
-        padding: 0 1rem;
-    }
+.boton:hover {
+    transform: scale(1.05);
 }
 
-@media (max-width: 480px) {
-    .titular h1 {
-        font-size: 1.8rem;
-    }
-    
-    .titular h2 {
-        font-size: 1rem;
-    }
+.boton.audio-btn {
+    display: inline-block;
+    width: 120px;
+    height: 120px;
+    background-image: url('img/colorpop2.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 120px;
+    border-radius: 10px;
+    transition: transform 0.2s;
+    font-family: "Crayon", cursive;
 }
 
-        /* HEADER */
-  
-  /* ✅ CORRECTO - un bloque por fuente */
-@font-face {
-    font-family: 'Revista';
-    src: url('fonts/REVISTA.ttf') format('truetype');
+.boton.audio-btn:hover {
+    transform: scale(1.05);
 }
 
-@font-face {
-    font-family: 'Crayon';
-    src: url('fonts/DK\ Cool\ Crayon.ttf') format('truetype');
-}
-    
-        * {
-            box-sizing: border-box;
-        }
-
-       
-
-        .seccion {
-            display: flex;
-            padding: 40px 0;
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: #F5F4F4;
-            font-family: 'Crayon';
-            border-radius: 1rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Agregar transición */
-            background-image: url("img/fondoDiv1.png");
-            background-size: cover;
-            margin-bottom: 5rem;
-
-        }
-
-        .seccion:hover {
-            transform: translateY(-10px); /* Efecto de movimiento */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Agregar sombra */
-        }
-
-        .seccion--reverse {
-            flex-direction: row-reverse;
-            
-        }
-
-        .contenido {
-            flex: 1 1 50%;
-            display: flex;
-            flex-direction: column;
-            background-size:cover;
-            padding-left: 3rem;
-            padding-right: 3rem;
-        }
-
-        .media {
-            flex: 1 1 50%;
-            padding: 20px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            
-            
-        }
-
-        .media img{
-            border-radius: 10px;
-
-        }
-
-        img {
-            width: 100%;
-            height: 100%;
-            margin-bottom: 30px;
-            object-fit: cover;
-        }
-
-        .botones {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-            background-color: none;
-        }
-
-        .boton {
-            display: inline-block;
-            width: 120px;
-            height: 120px;
-            background-image: url('img/colorpop2.png'); 
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-            text-align: center;
-            line-height: 120px;
-            border-radius: 10px;
-            transition: transform 0.2s;
-            font-family: "Crayon";
-
-            }
-
-        .boton:hover {
-                transform: scale(1.05);
-            }
-
-        /* Estilos específicos para el botón de audio */
-        .boton.audio-btn {
-            display: inline-block;
-            width: 120px;
-            height: 120px;
-            background-image: url('img/colorpop2.png'); /* Reemplaza con la URL de tu imagen */
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-            text-align: center;
-            line-height: 120px;
-            border-radius: 10px;
-            transition: transform 0.2s;
-            font-family: "Crayon";
-            
-        }
-
-        .boton.audio-btn:hover {
-            transform: scale(1.05); /* Mantener el efecto de escala */
-        }
-
-        h2 {
-            color: #000000;
-            font-size: 2.2em;
-            margin-bottom: 0.2rem;
-            line-height: 1.3;
-        }
-
-        p {
-            color: #000000;
-            line-height: 1.8;
-            font-size: 1.1em;
-            max-width: 600px;
-            margin-bottom: 10px;
-        }
-
-        @media (max-width: 768px) {
-            .seccion {
-                flex-direction: column;
-                padding: 30px 0;
-                background-color: #F5F4F4;
-            }
-
-            .seccion--reverse {
-                flex-direction: column;
-            }
-
-            .contenido, .media {
-                flex: 1 1 100%;
-                padding: 20px 15px;
-                text-align: center;
-            }
-
-            h2 {
-                font-size: 1.8em;
-                margin-bottom: 15px;
-                font-family: 'Caveat Brush';
-            }
-
-            p {
-                font-size: 1em;
-                max-width: 100%;
-            }
-
-            .boton {
-                padding: 12px 25px;
-                background-image: url('img/fondoboton.png'); /* Reemplaza con la URL de tu imagen */
-                color: white;
-                border: none;
-                border-radius: 25px;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                font-size: 16px;
-                text-decoration: none; /* Quita el subrayado de los enlaces */
-                display: inline-block; /* Necesario para que funcione el padding */
-            }
-
-            .boton:hover {
-                transform: translateY(-2px);
-            }
-        }
-        
+/* =====================================================================
+   REPRODUCTOR DE AUDIO
+   ===================================================================== */
 .audio-controles {
     display: none;
     position: absolute;
     bottom: 70px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.95);
+    background: rgba(0,0,0,0.95);
     padding: 15px;
     border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(130, 130, 130, 0.2);
+    box-shadow: 0 5px 15px rgba(130,130,130,0.2);
     width: 250px;
     z-index: 10;
 }
@@ -293,38 +514,22 @@
     background: #ddd;
     margin: 10px 0;
     cursor: pointer;
+    border-radius: 2px;
 }
 
 .progress {
     height: 100%;
     background: #ff0000;
     width: 0%;
-}
-
-.mapa-btn {
-    display: block;
-    width: 100%;
-    background: #000;
-    color: #000000;
-    padding: 0.5rem 1rem;
-    text-align: left;
-    border-radius: 5px;
-    font-family: 'Crayon';
-    font-size: 17px;
-    text-decoration: none;
-    margin-bottom: 1rem;
-}
-
-.mapa-btn:hover {
-    background: #000000;
-    color: #fff;
+    border-radius: 2px;
+    transition: width 0.1s linear;
 }
 
 .tiempo {
     display: flex;
     justify-content: space-between;
     font-size: 0.8em;
-    color: #ffffff;
+    color: #fff;
     margin-bottom: 10px;
 }
 
@@ -335,22 +540,111 @@
     justify-content: space-between;
 }
 
+.play-pause {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+
 .volumen-container {
     display: flex;
     align-items: center;
     gap: 5px;
- 
 }
 
-html {
-    scroll-behavior: smooth;
+.volumen {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 120px;
+    height: 4px;
+    background: #ddd;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    border: none;
 }
 
+.volumen::-webkit-slider-runnable-track {
+    background: #ddd;
+    height: 4px;
+    border-radius: 5px;
+    border: none;
+}
 
+.volumen::-moz-range-track {
+    background: #ff0000;
+    height: 4px;
+    border-radius: 5px;
+    border: none;
+}
+
+.volumen::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    border-radius: 50%;
+    border: 2px solid #ff0000;
+    cursor: pointer;
+    margin-top: -5px;
+}
+
+.volumen::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    border-radius: 50%;
+    border: 2px solid #ff0000;
+    cursor: pointer;
+}
+
+/* =====================================================================
+   MAPA INTERACTIVO
+   ===================================================================== */
+#mapa-interactivo {
+    position: relative;
+    margin: 40px auto;
+}
+
+.image-map-container {
+    position: relative;
+    width: 100%;
+    margin: 10px auto;
+    container-type: inline-size; /* Añade esta línea */
+}
+
+.base-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    display: block;
+}
+
+.map-point {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Añadido para asegurar el centrado interno */
+  transform: translate(-50%, -50%); /* ¡Esta es la clave! */
+}
+
+.map-point.active {
+    opacity: 1;
+}
+
+.map-point:hover .point {
+    transform: scale(1.2);
+}
+
+/* =====================================================================
+   FOOTER
+   ===================================================================== */
 .footer {
-    background: rgb(37, 37, 37);
+    background: rgb(37,37,37);
     color: white;
-    padding: 20px 20px;
+    padding: 20px;
     margin-top: 0;
     text-align: center;
 }
@@ -360,7 +654,7 @@ html {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px 0;
-    font-family: "Crayon";
+    font-family: "Crayon", cursive;
 }
 
 .footer-contenido p {
@@ -384,388 +678,142 @@ html {
     transform: translateY(-3px);
 }
 
-/* Estilo general de la barra de volumen */
-.volumen {
-  -webkit-appearance: none; /* Quita el estilo predeterminado en WebKit */
-  appearance: none;
-  width: 120px; /* Ancho de la barra */
-  height: 4px; /* Grosor de la barra */
-  background: #ddd; /* Color de la pista */
-  border-radius: 5px;
-  outline: none;
-  cursor: pointer;
-  border: none; /* Elimina bordes extra */
-}
-
-/* Personalización de la pista en Chrome, Safari y Edge */
-.volumen::-webkit-slider-runnable-track {
-  background: #ddd; /* Color de la pista */
-  height: 4px;
-  border-radius: 5px;
-  border: none; /* Asegura que no tenga bordes */
-}
-
-/* Personalización de la pista en Firefox */
-.volumen::-moz-range-track {
-  background: #ff0000;
-  height: 4px;
-  border-radius: 5px;
-  border: none;
-}
-
-/* Personalización del "thumb" (círculo deslizante) en Chrome, Safari y Edge */
-.volumen::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 14px; /* Tamaño del círculo */
-  height: 14px;
-  background: #ffffff; /* Color del thumb */
-  border-radius: 50%;
-  border: 2px solid #ff0000; /* Borde del thumb */
-  cursor: pointer;
-  margin-top: -5px; /* Alineación correcta */
-}
-
-/* Personalización del "thumb" en Firefox */
-.volumen::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
-  background: #ffffff;
-  border-radius: 50%;
-  border: 2px solid #ff0000;
-  cursor: pointer;
-}
-
-
-@media (max-width: 768px) {
-    .footer {
-        padding: 30px 15px;
-    }
-    
-    .footer-contenido p {
-        font-size: 0.9em;
+/* =====================================================================
+   RESPONSIVE — TABLET (≤ 992px)
+   ===================================================================== */
+@media (max-width: 992px) {
+    .titular h1 { font-size: 3rem; }
+    .titular h2 { font-size: 2.5rem; }
+    h2 { font-size: 1.9em; }
+    p  { font-size: 1em; }
+    .boton,
+    .boton.audio-btn {
+        width: 90px;
+        height: 90px;
+        font-size: 16px;
+        line-height: 90px;
     }
 }
 
-
-.back-to-top {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 10px 20px;
-    background: #ff0000;
-    color: white;
-    border-radius: 25px;
-    text-decoration: none;
-    transition: transform 0.3s ease;
-}
-
-.back-to-top:hover {
-    transform: translateY(-3px);
-}
-
+/* =====================================================================
+   RESPONSIVE — MOBILE (≤ 768px)
+   ===================================================================== */
 @media (max-width: 768px) {
-    .footer-contenido {
-        grid-template-columns: 1fr;
+    body {
+        margin-left: 0;
+        padding: 0 10px;
+    }
+
+    .menu-lateral {
+        transform: translateX(-100%);
+    }
+
+    .menu-lateral.open {
+        transform: translateX(0);
+    }
+
+    .menu-toggle {
+        left: 8px !important;
+        top: 8px;
+        width: 38px;
+        height: 38px;
+    }
+
+    .header { padding: 1.5rem 0; }
+    .header-contenido { padding: 0 1rem; }
+
+    .titular h1 {
+        font-size: 1.8rem;
+        font-family: 'Caveat Brush', cursive;
+    }
+
+    .titular h2 {
+        font-size: 1.1rem;
+        margin-top: 0.5rem;
+    }
+
+    .header-kicker {
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+    }
+
+    .seccion,
+    .seccion--reverse {
+        flex-direction: column;
+        padding: 30px 0;
+        margin-bottom: 3rem;
+    }
+
+    .seccion:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .contenido,
+    .media {
+        flex: 1 1 100%;
+        padding: 20px 15px;
         text-align: center;
     }
 
-    .redes-sociales {
-        justify-content: center;
-    }
-}
-
-
-/*MAPA*/
-.category-selector {
-    text-align: center;
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: center;
-    margin-right: 1rem;
-
-}
-
-.category-btn {
-    border: none;
-    border-radius: 25px;
-    background: #f0f0f0;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin: 1rem;
-    font-family: 'Crayon';
-    font-size: 17px;
-    padding: 10px;
-
-}
-
-.category-btn.active {
-    background: #000000;
-    color: white;
-    font-family: 'Crayon';
-}
-
-
-
-.image-map-container {
-    position: relative;
-    max-width: auto;
-    margin: 10px auto;
-}
-
-
-.base-image {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-}
-
-
-
-.point {
-    width: 20px;
-    height: 20px;
-    background: #ff0000;
-    border-radius: 50%;
-    position: relative;
-    animation: pulse 2s infinite;
-}
-
-.point-label {
-    position: absolute;
-    left: 30px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0,0,0,0.8);
-    color: white;
-    padding: 5px 15px;
-    border-radius: 20px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    white-space: nowrap;
-    pointer-events: none;
-}
-
-.map-point:hover .point-label {
-    opacity: 1;
-}
-
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(255, 23, 2, 0.5); }
-    70% { box-shadow: 0 0 0 15px rgba(0,123,255,0); }
-    100% { box-shadow: 0 0 0 0 rgba(0,123,255,0); }
-}
-
-/* Añadir a las secciones destino */
-.section-target {
-    scroll-margin-top: 100px; /* Ajusta según tu header */
-}
-
-/* Añadir estos estilos al section del mapa */
-#mapa-interactivo {
-    position: relative;
-    margin: 40px auto;
-    width: auto;
-    
-
-}
-
-/* Corregir estilos de los puntos */
-.map-point {
-    position: absolute;
-    cursor: pointer;
-    /* Puntos ocultos por defecto */
-    opacity: 0;
-    /* Transición para efecto suave */
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    z-index: 2;
-    font-family: 'Crayon';
-}
-
-/* Cuando tienen .active, se muestran */
-.map-point.active {
-    opacity: 1;
-}
-
-.map-point:hover .point {
-    transform: scale(1.2);
-    background: #ff0000;
-}
-
-.point-label {
-    position: absolute;
-    left: 30px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 8px 15px;
-    border-radius: 20px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    white-space: nowrap;
-    pointer-events: none;
-    font-family: 'Crayon';
-}
-
-.map-point:hover .point-label {
-    opacity: 1;
-}
-
-/* Asegurar que las secciones tienen scroll-margin */
-.section-target {
-    scroll-margin-top: 120px;
-}
-
-/*MAPA*/
-
-/* Estilos para el reproductor de audio */
-/* Estilos para el reproductor de audio */
-.reproductor {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    width: 250px;
-    margin-top: 20px;
-}
-
-.controles {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-}
-
-.controles button {
-    background-color: #ff0000;
-    color: #fff;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.controles button:hover {
-    background-color: #ff0000;
-}
-
-.controles input[type="range"] {
-    width: 100%;
-}
-
-.controles span {
-    font-size: 14px;
-    margin-top: 5px;
-}
-
-.hidden {
-  display: none;
-}
-
-.points-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-/* Simple estilo para ver la lista con padding */
-.points-list li {
-  padding: 4px 8px;
-  background: #f5f4f4;
-  margin: 2px 0;
-  border-radius: 5px;
-}
-.menu-lateral {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 220px; /* Ancho del menú */
-      height: 100vh;
-      background-color: #f1f1f1;
-      padding: 1rem;
-      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
-      overflow-y: auto;
-      transition: transform 0.3s ease; /* Animación para aparecer/desaparecer */
-      z-index: 999;
+    h2 {
+        font-size: 1.6em;
+        margin-bottom: 15px;
+        font-family: 'Caveat Brush', cursive;
     }
 
-    /* Cuando el menú está oculto, lo desplazamos a la izquierda */
-    .menu-lateral.oculto {
-      transform: translateX(-100%);
+    p {
+        font-size: 1em;
+        max-width: 100%;
     }
 
-    /* El botón para abrir/cerrar el menú, fijo a la izquierda y siempre visible */
-    .menu-toggle {
-      position: fixed;
-      top: 20px;     /* Ajusta según dónde quieras que aparezca verticalmente */
-      left: 0;       /* Pegado a la izquierda de la pantalla */
-      z-index: 1001; /* Para asegurarnos de que quede por encima del menú */
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      padding: 0.5rem;
+    .boton,
+    .boton.audio-btn {
+        width: 80px;
+        height: 80px;
+        font-size: 14px;
+        line-height: 80px;
     }
 
-    /* Icono dentro del botón */
-    .menu-toggle i {
-      pointer-events: none;
+    .audio-controles {
+        width: 200px;
+        bottom: 90px;
     }
 
-    body {
-        padding: 0 20px;
-        background-color: #F5F4F4;
-        transition: margin-left 0.3s ease;
-        margin-left: 220px; /* Aquí dejas espacio al menú */
-      }
-      
-      /* Cuando el menú está oculto */
-      .menu-lateral.oculto ~ body {
-        margin-left: 0;
-      }
+    .volumen {
+        width: 80px;
+    }
 
-      .categoria {
-  margin-bottom: 1rem;
+    #mapa-interactivo {
+        overflow-x: auto;
+    }
+
+    .image-map-container {
+        min-width: 480px;
+    }
+
+    .footer { padding: 30px 15px; }
+    .footer-contenido p { font-size: 0.9em; }
+    .footer-contenido { display: block; }
 }
 
-.toggle-sub {
-  display: block;
-  width: 100%;
-  background: #000;
-  color: #fff;
-  padding: 0.5rem 1rem;
-  text-align: left;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  font-family: 'Crayon';
-}
+/* =====================================================================
+   RESPONSIVE — MOBILE PEQUEÑO (≤ 480px)
+   ===================================================================== */
+@media (max-width: 480px) {
+    .titular h1 { font-size: 1.4rem; }
+    .titular h2 { font-size: 1rem; }
+    h2 { font-size: 1.3em; }
 
-.subcategorias {
-  list-style: none;
-  padding-left: 1rem;
-  display: none;
-  margin-top: 0.5rem;
-}
+    .boton,
+    .boton.audio-btn {
+        width: 70px;
+        height: 70px;
+        font-size: 13px;
+        line-height: 70px;
+    }
 
-.subcategorias li button {
-  background: #f0f0f0;
-  border: none;
-  width: 100%;
-  text-align: left;
-  padding: 0.4rem 0.8rem;
-  cursor: pointer;
-  border-radius: 5px;
-  margin-bottom: 0.3rem;
-  font-family: 'Crayon';
-}
-
-.subcategorias li button:hover {
-  background: #ddd;
-}
-
-body.bloqueo-scroll {
-  overflow: hidden;
+    .audio-controles {
+        width: 180px;
+    }
 }
